@@ -119,7 +119,7 @@ function nav_class(string $pagina, string $activa): string {
 
     <!-- Cerrar sesión -->
     <div class="sidebar-logout">
-        <a href="test.php" class="nav-item">
+        <a href="logout.php" class="nav-item">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=X" alt="Cerrar sesion" class="nav-img"></span>
             Cerrar sesion
         </a>

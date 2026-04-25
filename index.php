@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['usuario_nombre'])) {
+    header("Location: login.php");
+    exit();
+}
 /**
  * index.php
  * Dashboard principal del sistema DTE
@@ -98,7 +103,7 @@ $dtes_recientes = [
             <div class="quick-actions-grid">
 
                 <!-- Nueva factura consumidor final || FE -->
-                <a href="test.php" class="action-card">
+                <a href="factura_fe.php" class="action-card">
                     <div class="action-icon fe"><img src="https://placehold.co/24x24/c0392b/fde8e7?text=FE" alt="Factura" class="action-img"></div>
                     <h3>Factura consumidor final</h3>
                     <p>Para ventas a clientes regulares</p>
