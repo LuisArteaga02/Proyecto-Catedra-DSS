@@ -1,8 +1,25 @@
 <?php
 session_start();
+require_once 'class/Database.php';
+
 if (!isset($_SESSION['usuario_nombre'])) {
     header("Location: login.php");
     exit();
+}
+
+// Resaltar la página actual en el menú lateral
+$pagina_activa = 'FE';
+
+// Obtener productos de la base de datos para el formulario
+$db = new Database();
+$conn = $db->getConnection();
+$sql_prod = "SELECT id_producto, product_name, codigo_mh, precio FROM producto WHERE activo = 1";
+$result_prod = $conn->query($sql_prod);
+$productos_db = [];
+if ($result_prod) {
+    while($row = $result_prod->fetch_assoc()) {
+        $productos_db[] = $row;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -26,6 +43,14 @@ if (!isset($_SESSION['usuario_nombre'])) {
         </header>
 
         <main class="page-content">
+        
+            <!-- Mostrar alerta de error si algo falló en la base de datos -->
+            <?php if (isset($_GET['error'])): ?>
+                <div style="background: #fde8e7; border: 1px solid #d32f2f; color: #d32f2f; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px; font-weight: 600;">
+                    ❌ <?= htmlspecialchars($_GET['error']) ?>
+                </div>
+            <?php endif; ?>
+
             <div class="fe-container">
 
                 <!-- BANNER SUPERIOR -->
@@ -353,6 +378,9 @@ const TIPOS_DOC_REL = [
     {v:'09',l:'09 — DTE'}
 ];
 
+// Productos cargados desde la Base de Datos
+const PRODUCTOS_DB = <?= json_encode($productos_db) ?>;
+
 /* Genera <option> desde array {v, l} */
 function opts(arr, sel='') {
     return arr.map(o => `<option value="${o.v}"${o.v===sel?' selected':''}>${o.l}</option>`).join('');
@@ -396,12 +424,23 @@ function fmt(n) { return parseFloat(n||0).toFixed(2); }
             return v.toString(16).toUpperCase();
         });
 
-    document.getElementById('numero_control').value = 'DTE-01-00000001-000000000000001';
+    // El número de control ya no se quema aquí en el JS. Se generará automáticamente 
+    // en el servidor (PHP) de forma secuencial al guardar, para evitar colisiones.
+    document.getElementById('numero_control').value = '';
+    document.getElementById('numero_control').placeholder = 'Generado al guardar (Ej: DTE-01...)';
 })();
 
 /* ================================================================
    TABLA DE ÍTEMS
    ================================================================ */
+function optsProductos() {
+    let html = '<option value="">-- Seleccione un Producto --</option>';
+    PRODUCTOS_DB.forEach(p => {
+        html += `<option value="${p.id_producto}" data-precio="${p.precio}">${p.codigo_mh} - ${p.product_name}</option>`;
+    });
+    return html;
+}
+
 function filaItem(n) {
     return `
     <tr>
@@ -409,8 +448,12 @@ function filaItem(n) {
         <td class="td-tipo">${sel('tipo_item[]', TIPOS_ITEM)}</td>
         <td><input type="number" name="cant[]"          class="in-table qty"       min="1"   value="1"    step="1"    onkeypress="return isNum(event)"></td>
         <td>${sel('unidad[]', UNIDADES)}</td>
-        <td><input type="text"   name="desc[]"          class="in-table desc-col"  required  maxlength="1000"></td>
-        <td><input type="number" name="precio[]"        class="in-table price"     step="0.01" min="0" value="0.00" onkeypress="return isNum(event)"></td>
+        <td>
+            <select name="id_producto[]" class="in-table desc-col prod-select" required onchange="seleccionarProducto(this)">
+                ${optsProductos()}
+            </select>
+        </td>
+        <td><input type="number" name="precio[]"        class="in-table price"     step="0.01" min="0" value="0.00" onkeypress="return isNum(event)" readonly></td>
         <td><input type="number" name="otros_montos[]"  class="in-table otros"     step="0.01" value="0.00"         onkeypress="return isNum(event)"></td>
         <td><input type="number" name="iva_item[]"      class="in-table iva_item"  step="0.01" value="0.00" readonly></td>
         <td><input type="number" name="descuento_item[]"class="in-table desc_item" step="0.01" value="0.00"         onkeypress="return isNum(event)"></td>
@@ -419,6 +462,19 @@ function filaItem(n) {
         <td><input type="number" name="v_gravada[]"     class="in-table v_grav"    step="0.01" value="0.00" readonly></td>
         <td><button type="button" class="btn-del" onclick="delItem(this)">×</button></td>
     </tr>`;
+}
+
+function seleccionarProducto(selectEl) {
+    const tr = selectEl.closest('tr');
+    const option = selectEl.options[selectEl.selectedIndex];
+    const priceInput = tr.querySelector('.price');
+    
+    if (option.value) {
+        priceInput.value = parseFloat(option.dataset.precio).toFixed(2);
+    } else {
+        priceInput.value = '0.00';
+    }
+    calcTotales();
 }
 
 function addItem() {
@@ -641,12 +697,12 @@ function validarFormulario() {
 
     let itemsOk=true;
     document.querySelectorAll('#tablaItems tbody tr').forEach(tr=>{
-        const d=tr.querySelector('[name="desc[]"]');
-        const valid=d.value.trim().length>0;
-        d.classList.toggle('is-invalid',!valid);
+        const d = tr.querySelector('.prod-select');
+        const valid = d && d.value !== "";
+        if(d) d.classList.toggle('is-invalid',!valid);
         if(!valid) itemsOk=false;
     });
-    if(!itemsOk){ toast('Todos los ítems deben tener descripción.'); ok=false; }
+    if(!itemsOk){ toast('Debe seleccionar un producto válido para todos los ítems.'); ok=false; }
 
     const total=parseFloat(document.getElementById('h_total').value)||0;
     if(total<=0){ toast('El total a pagar debe ser mayor a $0.00'); ok=false; }

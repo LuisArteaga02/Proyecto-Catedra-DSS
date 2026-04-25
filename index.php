@@ -97,6 +97,13 @@ $dtes_recientes = [
         <!-- Contenido principal -->
         <main class="page-content">
 
+            <!-- Mostrar mensaje de éxito si venimos de generar una factura -->
+            <?php if (isset($_GET['msg']) && $_GET['msg'] === 'factura_ok'): ?>
+                <div style="background: #e8f5e9; border: 1px solid #2e7d32; color: #2e7d32; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px; font-weight: 600;">
+                    ✅ ¡Excelente! La factura y sus detalles se han guardado exitosamente en la base de datos.
+                </div>
+            <?php endif; ?>
+
             <!-- Acciones rápidas || Aqui hay que colocar las paginas correspondientes para la navegacion -->
             <h2 class="section-title">Acciones rápidas</h2>
 

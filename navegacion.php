@@ -8,11 +8,11 @@
  * La logica de este sidebar aún se falta establecer, asi que es solo un ejemplo
  */
 
-// Valores de ejemplo
+// Valores desde la sesión activa, con fallback a los ejemplos por defecto
 $pagina_activa      = $pagina_activa      ?? 'board';
-$usuario_nombre     = $usuario_nombre     ?? 'Luis Cartagena';
-$usuario_rol        = $usuario_rol        ?? 'Cajero - Sucursal central';
-$usuario_iniciales  = $usuario_iniciales  ?? 'XD';
+$usuario_nombre     = $_SESSION['usuario_nombre'] ?? 'Luis Cartagena';
+$usuario_rol        = $_SESSION['usuario_rol'] ?? 'Cajero - Sucursal central';
+$usuario_iniciales  = $_SESSION['usuario_iniciales'] ?? 'LC';
 
 /**
  * Helper: esto devuelve 'active' si la página coincide con la activa. Osea, que el glow en el sidebar coincida
@@ -66,7 +66,7 @@ function nav_class(string $pagina, string $activa): string {
     <nav class="nav-section">
         <span class="nav-section-label">Facturación</span>
 
-        <a href="test.php" class="nav-item<?= nav_class('FE', $pagina_activa) ?>">
+        <a href="factura_fe.php" class="nav-item<?= nav_class('FE', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=F" alt="Nueva factura" class="nav-img"></span>
             <span class="nav-item-text">Factura consumidor - FE 01</span>
         </a>
@@ -90,7 +90,7 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Sección: Consultas -->
     <nav class="nav-section">
         <span class="nav-section-label">Consultas</span>
-        <a href="test.php" class="nav-item<?= nav_class('HISTORIAL', $pagina_activa) ?>">
+        <a href="historial_dte.php" class="nav-item<?= nav_class('HISTORIAL', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=H" alt="Historial" class="nav-img"></span>
             Historial de DTEs
         </a>

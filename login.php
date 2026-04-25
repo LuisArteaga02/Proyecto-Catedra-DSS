@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once 'class/Database.php';
+
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,19 +9,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_input = $_POST['user'] ?? '';
     $pass_input = $_POST['pass'] ?? '';
 
-    // Credenciales quemadas para el avance del lunes
-    $user_valido = "lcartagena@pizzeria.com.sv";
-    $pass_valida = "123456";
+    try {
+        $db = new Database();
+        $conn = $db->getConnection();
 
-    if ($user_input === $user_valido && $pass_input === $pass_valida) {
-        $_SESSION['usuario_nombre'] = "Luis Cartagena";
-        $_SESSION['usuario_rol'] = "Cajero - Sucursal central";
-        $_SESSION['usuario_iniciales'] = "LC";
-        
-        header("Location: index.php");
-        exit();
-    } else {
-        $error = "Usuario o contraseña incorrectos.";
+        // Buscamos al usuario por correo en la base de datos
+        $stmt = $conn->prepare("SELECT id_usuario, nombre, contrasena_hash FROM usuario WHERE correo = ?");
+        $stmt->bind_param("s", $user_input);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            
+            // Verificamos que la contraseña ingresada coincida con el hash
+            if (password_verify($pass_input, $row['contrasena_hash'])) {
+                // Sacamos las iniciales dinámicamente del nombre para el diseño de tu navbar
+                $nombres = explode(" ", trim($row['nombre']));
+                $iniciales = strtoupper(substr($nombres[0], 0, 1));
+                if (isset($nombres[1])) {
+                    $iniciales .= strtoupper(substr($nombres[1], 0, 1));
+                }
+
+                $_SESSION['usuario_nombre'] = $row['nombre'];
+                $_SESSION['usuario_rol'] = "Cajero - Sucursal central"; // Rol quemado porque aún no hay tabla de roles
+                $_SESSION['usuario_iniciales'] = $iniciales;
+                $_SESSION['id_usuario'] = $row['id_usuario'];
+                
+                header("Location: index.php");
+                exit();
+            } else {
+                $error = "Usuario o contraseña incorrectos.";
+            }
+        } else {
+            // BACKUP: Credenciales quemadas para el avance del lunes
+            // Si el correo no está en la base de datos, revisamos si es el quemado
+            $user_valido = "lcartagena@pizzeria.com.sv";
+            $pass_valida = "123456";
+
+            if ($user_input === $user_valido && $pass_input === $pass_valida) {
+                $_SESSION['usuario_nombre'] = "Luis Cartagena";
+                $_SESSION['usuario_rol'] = "Cajero - Sucursal central";
+                $_SESSION['usuario_iniciales'] = "LC";
+                
+                header("Location: index.php");
+                exit();
+            } else {
+                $error = "Usuario o contraseña incorrectos.";
+            }
+        }
+    } catch (Exception $e) {
+        $error = "Error del sistema al conectar con la base de datos.";
     }
 }
 ?>
@@ -85,6 +125,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     <div class="form-footer">
                         <a href="#">¿Olvido su contraseña? <span class="red-text">Contacte con el administrador</span></a>
+                        <br><br>
+                        <a href="registro.php">¿No tienes cuenta? <span class="red-text">Crea un usuario nuevo</span></a>
                     </div>
                 </form>
             </div>
