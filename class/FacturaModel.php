@@ -45,7 +45,7 @@ class FacturaModel {
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $idFactura);
         $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        return $stmt->get_result()->fetch_assoc(); 
     }
 
     // Obtiene el detalle de las pizzas/bebidas cruzando con la tabla producto

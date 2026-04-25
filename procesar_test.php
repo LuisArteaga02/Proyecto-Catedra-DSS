@@ -2,8 +2,7 @@
 require_once 'class/GeneradorDTE.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Aquí normalmente insertarías en 'factura' y 'factura_detalle' primero.
-    // Para la prueba, simularemos que la factura creada tiene el ID 1.
+
     $idFacturaPrueba = 1; 
 
     $generador = new GeneradorDTE();
