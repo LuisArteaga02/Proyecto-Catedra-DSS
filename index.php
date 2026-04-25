@@ -1,14 +1,14 @@
 <?php
 /**
  * index.php
- * Dashboard principal - Sistema DTE
+ * Dashboard principal del sistema DTE
  * Pizzeria El Salvador
  */
 
-// Página activa para resaltar en el sidebar
-$pagina_activa = 'inicio';
+// Esta linea es para resaltar la pagina actual en el sidebar
+$pagina_activa = 'BOARD';
 
-// Datos de ejemplo de DTEs recientes
+// Este es un array de ejemplo para que se muestre en los DTEs recientes
 $dtes_recientes = [
     [
         'tipo'          => 'FE',
@@ -54,6 +54,8 @@ $dtes_recientes = [
     ],
 ];
 ?>
+
+<!-- Estructura del dashboard -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -65,68 +67,71 @@ $dtes_recientes = [
 <body>
 
 <div class="layout">
-
-    <!-- ========== SIDEBAR ========== -->
+    <!-- se invoca el sidebar -->
     <?php include 'navegacion.php'; ?>
 
-    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <!-- Aqui va el contenido principal -->
     <div class="main-content">
 
         <!-- Topbar -->
         <header class="topbar">
             <h1>Inicio</h1>
+
+             <!-- Propuesta para agregar tiempo-->
             <div class="topbar-right">
                 <span class="topbar-date">Vie, 20 Mar 2026</span>
+
+                <!-- Propuesta para agregar notificaciones -->
                 <span class="topbar-bell" title="Notificaciones">
                     <img src="https://placehold.co/20x20/6b6560/ffffff?text=N" alt="Notificaciones" class="topbar-img">
                 </span>
+
             </div>
         </header>
 
-        <!-- Contenido -->
+        <!-- Contenido principal -->
         <main class="page-content">
 
-            <!-- ===== Acciones rápidas ===== -->
+            <!-- Acciones rápidas || Aqui hay que colocar las paginas correspondientes para la navegacion -->
             <h2 class="section-title">Acciones rápidas</h2>
 
             <div class="quick-actions-grid">
 
-                <!-- Nueva factura consumidor final -->
-                <div class="action-card">
+                <!-- Nueva factura consumidor final || FE -->
+                <a href="test.php" class="action-card">
                     <div class="action-icon fe"><img src="https://placehold.co/24x24/c0392b/fde8e7?text=FE" alt="Factura" class="action-img"></div>
-                    <h3>Nueva factura consumidor final</h3>
-                    <p>Para ventas a personas sin NIT inscrito en IVA</p>
-                    <span class="dte-badge fe">FE - TipoDTE01</span>
-                </div>
-
-                <!-- Nuevo crédito fiscal -->
-                <div class="action-card">
+                    <h3>Factura consumidor final</h3>
+                    <p>Para ventas a clientes regulares</p>
+                    <span class="dte-badge fe">FE - TipoDTE 01</span>
+                </a>
+ 
+                <!-- Nuevo crédito fiscal || CCF -->
+                <a href="test.php" class="action-card">
                     <div class="action-icon ccf"><img src="https://placehold.co/24x24/2e7d32/e6f4ea?text=CF" alt="Credito Fiscal" class="action-img"></div>
-                    <h3>Nuevo crédito fiscal</h3>
+                    <h3>Crédito fiscal</h3>
                     <p>Para empresas y contribuyentes inscritos en IVA</p>
-                    <span class="dte-badge ccf">CCF - TipoDte 03</span>
-                </div>
-
-                <!-- Nota de crédito -->
-                <div class="action-card">
+                    <span class="dte-badge ccf">CCF - TipoDTE 03</span>
+                </a>
+ 
+                <!-- Nota de crédito || NCE -->
+                <a href="test.php" class="action-card">
                     <div class="action-icon nce"><img src="https://placehold.co/24x24/e65100/fff3e0?text=NC" alt="Nota Credito" class="action-img"></div>
                     <h3>Nota de crédito</h3>
                     <p>Para ajustar o devolver una FE o CCF ya aceptada</p>
-                    <span class="dte-badge nce">NCE - TipoDte 05</span>
-                </div>
-
-                <!-- Invalidar DTE -->
-                <div class="action-card">
+                    <span class="dte-badge nce">NCE - TipoDTE 05</span>
+                </a>
+ 
+                <!-- Invalidar DTE || Invalidacion -->
+                <a href="test.php" class="action-card">
                     <div class="action-icon inv"><img src="https://placehold.co/24x24/424242/eeeeee?text=IN" alt="Invalidar" class="action-img"></div>
-                    <h3>Invalidar DTE</h3>
-                    <p>Anular un DTE aceptado dentro del plazo de 90 dias</p>
+                    <h3>Invalidar un DTE</h3>
+                    <p>Anular un DTE aceptado dentro del plazo</p>
                     <span class="dte-badge inv">Invalidacion - 06</span>
-                </div>
+                </a>
+ 
+            </div>            
 
-            </div>
-            <!-- /quick-actions-grid -->
-
-            <!-- ===== DTEs recientes ===== -->
+            <!--  DTEs recientes || Aqui se invocan los DTEs recientes establecidos arriba. La logica de esta funcion se tiene que modificar -->
             <div class="dtes-recientes-card">
                 <h2 class="section-title">DTEs recientes</h2>
 
@@ -187,14 +192,11 @@ $dtes_recientes = [
                     </tbody>
                 </table>
             </div>
-            <!-- /dtes-recientes-card -->
 
         </main>
     </div>
-    <!-- /main-content -->
 
 </div>
-<!-- /layout -->
 
 </body>
 </html>

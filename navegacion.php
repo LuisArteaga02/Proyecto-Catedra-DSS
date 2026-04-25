@@ -3,34 +3,31 @@
  * navegacion.php
  * Componente reutilizable del sidebar para el Sistema DTE
  * 
- * Uso: <?php include 'navegacion.php'; ?>
+ * Se invoca con: <?php include 'navegacion.php'; ?>
  *
- * Variables opcionales que pueden definirse antes de incluir este archivo:
- *   $pagina_activa  → string: 'inicio' | 'historial' | 'reportes' | 'configuracion'
- *   $usuario_nombre → string: nombre completo del cajero
- *   $usuario_rol    → string: rol del usuario
- *   $usuario_iniciales → string: iniciales para el avatar (ej. "LC")
+ * La logica de este sidebar aún se falta establecer, asi que es solo un ejemplo
  */
 
-// Valores por defecto
-$pagina_activa      = $pagina_activa      ?? 'inicio';
+// Valores de ejemplo
+$pagina_activa      = $pagina_activa      ?? 'board';
 $usuario_nombre     = $usuario_nombre     ?? 'Luis Cartagena';
 $usuario_rol        = $usuario_rol        ?? 'Cajero - Sucursal central';
-$usuario_iniciales  = $usuario_iniciales  ?? 'LC';
+$usuario_iniciales  = $usuario_iniciales  ?? 'XD';
 
 /**
- * Helper: devuelve 'active' si la página coincide con la activa.
+ * Helper: esto devuelve 'active' si la página coincide con la activa. Osea, que el glow en el sidebar coincida
  */
 function nav_class(string $pagina, string $activa): string {
     return $pagina === $activa ? ' active' : '';
 }
 ?>
+
 <aside class="sidebar">
 
     <!-- Branding -->
     <div class="sidebar-brand">
-        <div class="brand-logo-placeholder">
-            <img src="https://placehold.co/28x28/c0392b/ffffff?text=P" alt="Logo Pizzeria" class="sidebar-img">
+        <div>
+            <img src="https://png.pngtree.com/png-clipart/20250703/original/pngtree-pizza-logo-transparent-image-free-for-online-download-png-image_21265162.png" alt="Logo Pizzeria" class="sidebar-img">
         </div>
         <div class="brand-text">
             <span class="brand-name">Pizzeria El Salvador</span>
@@ -38,7 +35,7 @@ function nav_class(string $pagina, string $activa): string {
         </div>
     </div>
 
-    <!-- Pill de estado MH -->
+    <!-- Pill de estado MH || Esto es para ver si el sistema esta conectado con la API de Hacienda -->
     <span class="status-pill">
         <span class="dot"></span>
         Producción - MH conectado
@@ -59,16 +56,41 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Sección: Panel -->
     <nav class="nav-section">
         <span class="nav-section-label">Panel</span>
-        <a href="index.php" class="nav-item<?= nav_class('inicio', $pagina_activa) ?>">
+        <a href="index.php" class="nav-item<?= nav_class('BOARD', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=I" alt="Inicio" class="nav-img"></span>
             Inicio
+        </a>
+    </nav>
+
+    <!-- Sección: Facturación -->
+    <nav class="nav-section">
+        <span class="nav-section-label">Facturación</span>
+
+        <a href="test.php" class="nav-item<?= nav_class('FE', $pagina_activa) ?>">
+            <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=F" alt="Nueva factura" class="nav-img"></span>
+            <span class="nav-item-text">Factura consumidor - FE 01</span>
+        </a>
+
+        <a href="test.php" class="nav-item<?= nav_class('CCF', $pagina_activa) ?>">
+            <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=C" alt="Credito fiscal" class="nav-img"></span>
+            <span class="nav-item-text">Crédito fiscal - CCF 03</span>
+        </a>
+
+        <a href="test.php" class="nav-item<?= nav_class('NCE', $pagina_activa) ?>">
+            <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=N" alt="Nota de credito" class="nav-img"></span>
+            <span class="nav-item-text">Nota de crédito - NCE 05</span>
+        </a>
+
+        <a href="test.php" class="nav-item<?= nav_class('INVALIDACION', $pagina_activa) ?>">
+            <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=X" alt="Invalidar DTE" class="nav-img"></span>
+            <span class="nav-item-text">Invalidar DTE</span>
         </a>
     </nav>
 
     <!-- Sección: Consultas -->
     <nav class="nav-section">
         <span class="nav-section-label">Consultas</span>
-        <a href="historial.php" class="nav-item<?= nav_class('historial', $pagina_activa) ?>">
+        <a href="test.php" class="nav-item<?= nav_class('HISTORIAL', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=H" alt="Historial" class="nav-img"></span>
             Historial de DTEs
         </a>
@@ -77,7 +99,7 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Sección: Reportes -->
     <nav class="nav-section">
         <span class="nav-section-label">Reportes</span>
-        <a href="reportes.php" class="nav-item<?= nav_class('reportes', $pagina_activa) ?>">
+        <a href="test.php" class="nav-item<?= nav_class('REPORTES', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=R" alt="Reportes" class="nav-img"></span>
             Reportes
         </a>
@@ -86,7 +108,7 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Sección: Configuración -->
     <nav class="nav-section">
         <span class="nav-section-label">Configuracion</span>
-        <a href="configuracion.php" class="nav-item<?= nav_class('configuracion', $pagina_activa) ?>">
+        <a href="test.php" class="nav-item<?= nav_class('CONFIGURACION', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=C" alt="Configuracion" class="nav-img"></span>
             Configuracion
         </a>
@@ -97,7 +119,7 @@ function nav_class(string $pagina, string $activa): string {
 
     <!-- Cerrar sesión -->
     <div class="sidebar-logout">
-        <a href="logout.php" class="nav-item">
+        <a href="test.php" class="nav-item">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=X" alt="Cerrar sesion" class="nav-img"></span>
             Cerrar sesion
         </a>

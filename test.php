@@ -1,5 +1,5 @@
 <?php
-$pagina_activa = 'historial';
+$pagina_activa = 'FE';
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@ $pagina_activa = 'historial';
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-        <!-- ========== SIDEBAR ========== -->
+    <!-- se invoca el sidebar -->
     <?php include 'navegacion.php'; ?>
 </body>
 </html>
