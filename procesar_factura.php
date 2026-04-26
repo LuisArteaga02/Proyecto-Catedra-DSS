@@ -63,10 +63,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Calculamos cuánto de la venta gravada corresponde al IVA (13%)
         $total_iva = $total_gravado - ($total_gravado / 1.13);
 
-        /* 
-         * Ya no perderemos los datos del cliente. Primero verificamos si ya existe por su DUI/NIT,
-         * y si no, lo registramos. Luego lo vinculamos a la factura usando la tabla `factura_vinculo`.
-         */
+        // --------------------------------------------------------
+        // 1. CAPTURA DE DATOS DEL CLIENTE Y UBICACIÓN CORREGIDA
+        // --------------------------------------------------------
         $cliente_nombre = $_POST['cliente_nombre'] ?? 'Consumidor Final';
         $tipo_doc = $_POST['tipo_doc'] ?? '13'; // 13 es DUI por defecto en SV
         $cliente_doc = $_POST['cliente_doc'] ?? '';
@@ -75,15 +74,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cliente_tel = $_POST['cliente_tel'] ?? '';
         $cliente_direccion = $_POST['cliente_direccion'] ?? 'Sin dirección';
         
-        // Extraer dep/mun de 'ubicacion' -> ej: "06-14"
-        $ubicacion = $_POST['ubicacion'] ?? '06-14';
-        $partes_ubi = explode('-', $ubicacion);
-        $dir_departamento = $partes_ubi[0] ?? '06';
-        $dir_municipio = $partes_ubi[1] ?? '14';
+        // Capturamos los campos separados tal como los envía el nuevo HTML
+        $dir_departamento = !empty($_POST['dir_departamento']) ? str_pad($_POST['dir_departamento'], 2, '0', STR_PAD_LEFT) : null;
+        $dir_municipio = !empty($_POST['dir_municipio']) ? str_pad($_POST['dir_municipio'], 2, '0', STR_PAD_LEFT) : null;
         
-        $cod_actividad = !empty($_POST['actividad_receptor']) ? $_POST['actividad_receptor'] : '10005'; 
+        // Si no seleccionó actividad, lo forzamos a NULL para no romper la llave foránea
+        $cod_actividad = !empty($_POST['actividad_receptor']) ? $_POST['actividad_receptor'] : null; 
         
-        $id_receptor = 0;
+        $id_receptor = null;
         
         if (!empty($cliente_doc) || !empty($cliente_nombre)) {
             $sql_buscar = "SELECT id_receptor FROM receptor WHERE num_documento = ? AND num_documento != '' LIMIT 1";
@@ -109,16 +107,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         
-        // Insertamos la Factura
+        // --------------------------------------------------------
+        // 2. INSERCIÓN DE FACTURA CON ID_RECEPTOR INTEGRADO
+        // --------------------------------------------------------
+        // Ahora guardamos el id_receptor directamente en la tabla factura
         $sql_factura = "INSERT INTO factura (
-            codigo_generacion, numero_control, fecha_emision, hora_emision, condicion_pago,
+            id_receptor, codigo_generacion, numero_control, fecha_emision, hora_emision, condicion_pago,
             total_no_sujeto, total_exento, total_gravado, sub_total, iva_retenido,
             monto_total, total_iva, total_letras
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Total generado por sistema')";
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Total generado por sistema')";
         
         $stmt = $conn->prepare($sql_factura);
-        $stmt->bind_param("ssssiddddddd", 
-            $codigo_generacion, $numero_control, $fecha_emision, $hora_emision, $condicion_pago,
+        
+        // El primer parámetro es el ID del receptor que acabamos de crear/buscar
+        // 'i' para id_receptor, seguido del resto
+        $stmt->bind_param("issssiddddddd", 
+            $id_receptor, $codigo_generacion, $numero_control, $fecha_emision, $hora_emision, $condicion_pago,
             $total_no_sujeto, $total_exento, $total_gravado, $sub_total, $iva_retenido,
             $monto_total, $total_iva
         );
@@ -127,13 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Tomamos el ID de la factura que acabamos de insertar
         $id_factura = $conn->insert_id; 
 
-        // Creamos el vínculo entre la factura y el receptor
-        if ($id_receptor > 0) {
-            $sql_vinculo = "INSERT INTO factura_vinculo (id_factura, id_receptor) VALUES (?, ?)";
-            $stmt_vinculo = $conn->prepare($sql_vinculo);
-            $stmt_vinculo->bind_param("ii", $id_factura, $id_receptor);
-            $stmt_vinculo->execute();
-        }
+       
 
         // OBTENEMOS EL DETALLE DE ÍTEMS (Tabla 'factura_detalle')
         $ids_producto = $_POST['id_producto'] ?? []; // Ahora recibimos el ID real

@@ -22,11 +22,26 @@ $f_tipo = $_GET['f_tipo'] ?? '';
 $f_estado = $_GET['f_estado'] ?? '';
 
 // Construir la consulta dinámica
-$sql = "SELECT f.*, r.nombre AS receptor_nombre, r.num_documento AS receptor_doc 
-        FROM factura f 
-        LEFT JOIN factura_vinculo fv ON f.id_factura = fv.id_factura
-        LEFT JOIN receptor r ON fv.id_receptor = r.id_receptor
-        WHERE 1=1";
+$sql = "SELECT 
+            f.tipo_dte, 
+            r.nombre AS receptor_nombre, 
+            r.num_documento AS receptor_doc, 
+            f.numero_control, 
+            f.codigo_generacion, 
+            f.monto_total, 
+            f.estado_mh, 
+            f.fecha_registro,
+            f.fecha_emision,
+            f.hora_emision,
+            f.sello_recibido,
+            f.descripcion_msg,
+            f.total_iva,
+            f.iva_retenido,
+            f.retencion_renta
+        FROM factura f
+        LEFT JOIN receptor r ON f.id_receptor = r.id_receptor
+        WHERE 1=1"; 
+       
 
 $tipos_param = "";
 $params = [];

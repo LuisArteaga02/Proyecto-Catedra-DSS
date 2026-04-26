@@ -1,4 +1,13 @@
 <?php
+require_once 'class/Database.php';
+$db = new Database();
+$conn = $db->getConnection();
+
+// Verificar si hay conexión
+if (!$conn) {
+    die("Error de conexión a la base de datos.");
+}
+
 session_start();
 if (!isset($_SESSION['usuario_nombre'])) {
     header("Location: login.php");
@@ -13,51 +22,55 @@ if (!isset($_SESSION['usuario_nombre'])) {
 // Esta linea es para resaltar la pagina actual en el sidebar
 $pagina_activa = 'BOARD';
 
-// Este es un array de ejemplo para que se muestre en los DTEs recientes
-$dtes_recientes = [
-    [
-        'tipo'          => 'FE',
-        'tipo_label'    => 'FE - 01',
-        'tipo_class'    => 'fe',
-        'receptor'      => 'Carlos Rivera Martínez',
-        'n_control'     => '...P001-00000047',
-        'tiempo'        => 'hace 5 min',
-        'monto'         => '$12.25',
-        'monto_neg'     => false,
-        'estado'        => 'Contingencia',
-        'estado_class'  => 'contingencia',
-        'accion_label'  => 'Reenviar',
-        'accion_icon'   => 'reenviar',
-    ],
-    [
-        'tipo'          => 'CCF',
-        'tipo_label'    => 'CCF - 03',
-        'tipo_class'    => 'ccf',
-        'receptor'      => 'Distribuidora El Buen Gusto S.A.',
-        'n_control'     => '...P001-00000046',
-        'tiempo'        => 'hace 22 min',
-        'monto'         => '$72.50',
-        'monto_neg'     => false,
-        'estado'        => 'Aceptado',
-        'estado_class'  => 'aceptado',
-        'accion_label'  => 'Ver PDF',
-        'accion_icon'   => 'pdf',
-    ],
-    [
-        'tipo'          => 'NCE',
-        'tipo_label'    => 'NCE - 05',
-        'tipo_class'    => 'nce',
-        'receptor'      => 'Pedro Martínez Sánchez',
-        'n_control'     => '...P001-00000045',
-        'tiempo'        => 'hace 1 hora',
-        'monto'         => '-$10.00',
-        'monto_neg'     => true,
-        'estado'        => 'Aceptado',
-        'estado_class'  => 'aceptado',
-        'accion_label'  => 'Ver PDF',
-        'accion_icon'   => 'pdf',
-    ],
-];
+// Array que muestra los DTE recientes con la base de datos
+$sql_recientes = "SELECT 
+                    f.tipo_dte, 
+                    r.nombre AS receptor_nombre, 
+                    f.numero_control, 
+                    f.monto_total, 
+                    f.estado_mh, 
+                    f.fecha_registro
+                  FROM factura f
+                  LEFT JOIN receptor r ON f.id_receptor = r.id_receptor
+                  ORDER BY f.fecha_registro DESC 
+                  LIMIT 5";
+
+$result_recientes = $conn->query($sql_recientes);
+$dtes_recientes = [];
+
+if ($result_recientes) {
+    while ($row = $result_recientes->fetch_assoc()) {
+        // Mapeo de Clases para el Tipo de DTE
+        $tipo_label = ($row['tipo_dte'] == '01') ? 'Factura' : 'CCF';
+        $tipo_class = ($row['tipo_dte'] == '01') ? 'badge-factura' : 'badge-ccf';
+
+        // Mapeo de Clases para el Estado de Hacienda
+        $estado_class = '';
+        switch ($row['estado_mh']) {
+            case 'ACEPTADO': $estado_class = 'success'; break;
+            case 'RECHAZADO': $estado_class = 'danger'; break;
+            case 'PENDIENTE': $estado_class = 'warning'; break;
+            default: $estado_class = 'info'; break;
+        }
+
+        // Calcular tiempo relativo (hace 5 min, etc.) o usar fecha formateada
+        $tiempo = date('d/m/Y H:i', strtotime($row['fecha_registro']));
+
+        $dtes_recientes[] = [
+            'tipo_label'   => $tipo_label,
+            'tipo_class'   => $tipo_class,
+            'receptor'     => $row['receptor_nombre'] ?? 'Consumidor Final',
+            'n_control'    => $row['numero_control'],
+            'tiempo'       => $tiempo,
+            'monto'        => '$ ' . number_format($row['monto_total'], 2),
+            'monto_neg'    => false, // En facturas de venta suele ser positivo
+            'estado'       => $row['estado_mh'],
+            'estado_class' => $estado_class,
+            'accion_label' => 'Ver PDF',
+            'accion_icon'  => 'P'
+        ];
+    }
+}
 ?>
 
 <!-- Estructura del dashboard -->
