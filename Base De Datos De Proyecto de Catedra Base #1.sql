@@ -424,6 +424,23 @@ CREATE TABLE `usuario` (
 
 
 
+# Dump of table factura_vinculo
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `factura_vinculo`;
+
+CREATE TABLE `factura_vinculo` (
+  `id_vinculo` int NOT NULL AUTO_INCREMENT,
+  `id_factura` int NOT NULL,
+  `id_receptor` int NOT NULL,
+  PRIMARY KEY (`id_vinculo`),
+  KEY `fk_fv_factura` (`id_factura`),
+  KEY `fk_fv_receptor` (`id_receptor`),
+  CONSTRAINT `fk_fv_factura` FOREIGN KEY (`id_factura`) REFERENCES `factura` (`id_factura`) ON DELETE CASCADE,
+  CONSTRAINT `fk_fv_receptor` FOREIGN KEY (`id_receptor`) REFERENCES `receptor` (`id_receptor`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 # Dump of views
 # ------------------------------------------------------------
 

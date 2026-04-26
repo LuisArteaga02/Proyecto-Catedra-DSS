@@ -19,19 +19,22 @@ class FacturaModel {
 
     // Obtener datos del receptor vinculado a la factura
     public function getReceptorPorFactura($idFactura) {
+        // Hacemos JOIN con la tabla factura para saber a quién le pertenece
         $query = "SELECT 
                     r.*, 
                     ae.descripcion as actividad_desc
                   FROM receptor r
+                  JOIN factura f ON r.id_receptor = f.id_receptor
                   LEFT JOIN cat_actividad_economica ae ON r.cod_actividad = ae.codigo
-                  WHERE r.id_receptor = (SELECT id_receptor FROM factura_vinculo WHERE id_factura = ?)";
+                  WHERE f.id_factura = ?";
         
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $idFactura);
         $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        $resultado = $stmt->get_result();
+        
+        return $resultado->fetch_assoc();
     }
-
     // Obtiene los datos generales de la factura (Encabezado y Resumen)
     public function getEncabezadoFactura($idFactura) {
         $query = "SELECT 
