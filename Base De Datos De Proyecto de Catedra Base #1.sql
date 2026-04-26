@@ -1,3 +1,6 @@
+CREATE DATABASE pizzeria_dte;
+USE pizzeria_dte;
+
 # ************************************************************
 # Antares - SQL Client
 # Version 0.7.35
