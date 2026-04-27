@@ -210,28 +210,11 @@ if ($result_prod) {
                             </div>
                         </section>
 
-                        <!-- ===== SECCIÓN 2: VENTA A CUENTA DE TERCEROS ===== -->
-                        <section class="fe-section">
-                            <h3 class="section-title"><span class="num">2</span> Venta a Cuenta de Terceros (Si aplica)</h3>
-                            <div class="box-info">
-                                <h4>⚠️ Complete solo si la venta se realiza en nombre de un tercero</h4>
-                                <div class="grid-2">
-                                    <div class="fe-group">
-                                        <label>NIT DEL TERCERO</label>
-                                        <input type="text" name="tercero_nit" id="tercero_nit" maxlength="17" placeholder="0000-000000-000-0">
-                                        <span class="error-msg" id="err_tercero_nit">Formato NIT inválido.</span>
-                                    </div>
-                                    <div class="fe-group">
-                                        <label>NOMBRE / RAZÓN SOCIAL DEL TERCERO</label>
-                                        <input type="text" name="tercero_nombre" maxlength="250" placeholder="Razón social del tercero">
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
+                       
 
-                        <!-- ===== SECCIÓN 3: DOCUMENTOS RELACIONADOS ===== -->
+                        <!-- ===== SECCIÓN 2: DOCUMENTOS RELACIONADOS ===== -->
                         <section class="fe-section">
-                            <h3 class="section-title"><span class="num">3</span> Documentos Relacionados (Si aplica)</h3>
+                            <h3 class="section-title"><span class="num">2</span> Documentos Relacionados (Si aplica)</h3>
                             <div class="table-wrap">
                                 <table class="docs-rel-table" id="tablaDocRel">
                                     <thead>
@@ -251,9 +234,9 @@ if ($result_prod) {
                             </p>
                         </section>
 
-                        <!-- ===== SECCIÓN 4: DETALLE DE ÍTEMS ===== -->
+                        <!-- ===== SECCIÓN 3: DETALLE DE ÍTEMS ===== -->
                         <section class="fe-section">
-                            <h3 class="section-title"><span class="num">4</span> Detalle de Ítems</h3>
+                            <h3 class="section-title"><span class="num">3</span> Detalle de Ítems</h3>
                             <div class="table-wrap">
                                 <table class="items-table" id="tablaItems">
                                     <thead>
@@ -282,9 +265,9 @@ if ($result_prod) {
                             </p>
                         </section>
 
-                        <!-- ===== SECCIÓN 5: RESUMEN Y TOTALES ===== -->
+                        <!-- ===== SECCIÓN 4: RESUMEN Y TOTALES ===== -->
                         <section class="fe-section no-border">
-                            <h3 class="section-title"><span class="num">5</span> Resumen y Totales</h3>
+                            <h3 class="section-title"><span class="num">4</span> Resumen y Totales</h3>
                             <div class="footer-grid">
 
                                 <!-- Columna izquierda: observaciones, condición, formas de pago -->
@@ -356,9 +339,9 @@ if ($result_prod) {
                             </div>
                         </section>
 
-                        <!-- ===== SECCIÓN 6: RESPONSABLES ===== -->
+                        <!-- ===== SECCIÓN 5: RESPONSABLES ===== -->
                         <section class="fe-section">
-                            <h3 class="section-title"><span class="num">6</span> Responsables</h3>
+                            <h3 class="section-title"><span class="num">5</span> Responsables</h3>
                             <div class="responsables-grid">
                                 <div class="responsable-box">
                                     <label>RESPONSABLE — EMISOR</label>

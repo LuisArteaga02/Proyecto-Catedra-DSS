@@ -27,7 +27,7 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Branding -->
     <div class="sidebar-brand">
         <div>
-            <img src="https://png.pngtree.com/png-clipart/20250703/original/pngtree-pizza-logo-transparent-image-free-for-online-download-png-image_21265162.png" alt="Logo Pizzeria" class="sidebar-img">
+            <img src="img/pizza.png" alt="Logo Pizzeria" class="sidebar-img">
         </div>
         <div class="brand-text">
             <span class="brand-name">Pizzeria El Salvador</span>
