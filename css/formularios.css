@@ -689,3 +689,158 @@ input[readonly] {
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
     .forma-pago-row            { grid-template-columns: 1fr 1fr; }
 }
+
+
+/* ============================================================
+   EXTENSIONES Y OVERRIDES ESPECÍFICAS PARA CCF 
+   (Adaptadas al tema rojo y navy)
+   ============================================================ */
+
+/* Badge CCF — Usamos el navy para diferenciar un poco del FE, manteniendo paleta */
+.badge-ccf {
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 900;
+    font-size: 18px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+/* Header banner del CCF */
+.ccf-header-banner {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: var(--white);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--red);
+    border-radius: 4px 4px 0 0;
+}
+
+/* Contenedor principal CCF */
+.ccf-container {
+    background: var(--white);
+    border: 2px solid var(--navy);
+    border-radius: 6px;
+    max-width: 1300px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(27, 42, 74, 0.13);
+}
+
+/* Aviso informativo CCF */
+.ccf-aviso {
+    background: var(--red-light);
+    border: 1px solid #e8b4ae;
+    border-left: 4px solid var(--red);
+    border-radius: 0 4px 4px 0;
+    padding: 10px 16px;
+    font-size: 11px;
+    color: var(--navy);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.ccf-aviso strong { color: var(--red); }
+
+/* Código NIT — campo con botón inline */
+.nit-wrapper {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.nit-wrapper input { flex: 1; }
+
+.btn-consulta-nit {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    padding: 7px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.btn-consulta-nit:hover { background: var(--navy-light); }
+
+/* Bloque IVA retenido / retención renta */
+.retencion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* Box info receptor contribuyente */
+.box-info-ccf {
+    background: var(--red-light);
+    border: 1px solid #e8b4ae;
+    border-radius: 4px;
+    padding: 12px 14px;
+}
+
+.box-info-ccf h4 {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 10px;
+    border-bottom: 1px dashed var(--red);
+    padding-bottom: 6px;
+}
+
+/* Fila crédito fiscal deducible */
+.total-row.credito-fiscal {
+    background: var(--red-light);
+    border-top: 1px dashed #e8b4ae;
+    font-size: 11px;
+}
+
+.total-row.credito-fiscal span:last-child {
+    color: var(--red);
+    font-weight: 700;
+}
+
+/* Metadata strip — ajuste extra columna para CCF */
+.metadata-strip-ccf {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    background: var(--bg-section);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+}
+
+/* Tag IVA en columna de tabla */
+.th-iva { min-width: 80px; }
+.th-total { min-width: 90px; }
+
+/* Toast rojo para CCF success (hereda del theme pizzeria) */
+#toast-ccf {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--red);
+    color: var(--white);
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 4px 16px rgba(192,57,43,0.3);
+    display: none;
+    max-width: 340px;
+}
+
+#toast-ccf.show    { display: block; animation: slideIn 0.3s ease; }
+#toast-ccf.error   { background: var(--navy-dark); box-shadow: 0 4px 16px rgba(177, 60, 47, 0.3); }
+
+@media (max-width: 900px) {
+    .metadata-strip-ccf { grid-template-columns: 1fr 1fr; }
+    .retencion-grid { grid-template-columns: 1fr; }
+}
