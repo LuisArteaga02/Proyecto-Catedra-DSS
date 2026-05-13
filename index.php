@@ -131,7 +131,7 @@ if ($result_recientes) {
                 </a>
  
                 <!-- Nuevo crédito fiscal || CCF -->
-                <a href="test.php" class="action-card">
+                <a href="factura_ccf.php" class="action-card">
                     <div class="action-icon ccf"><img src="https://placehold.co/24x24/2e7d32/e6f4ea?text=CF" alt="Credito Fiscal" class="action-img"></div>
                     <h3>Crédito fiscal</h3>
                     <p>Para empresas y contribuyentes inscritos en IVA</p>
@@ -139,7 +139,7 @@ if ($result_recientes) {
                 </a>
  
                 <!-- Nota de crédito || NCE -->
-                <a href="test.php" class="action-card">
+                <a href="index.php" class="action-card">
                     <div class="action-icon nce"><img src="https://placehold.co/24x24/e65100/fff3e0?text=NC" alt="Nota Credito" class="action-img"></div>
                     <h3>Nota de crédito</h3>
                     <p>Para ajustar o devolver una FE o CCF ya aceptada</p>
@@ -147,7 +147,7 @@ if ($result_recientes) {
                 </a>
  
                 <!-- Invalidar DTE || Invalidacion -->
-                <a href="test.php" class="action-card">
+                <a href="index.php" class="action-card">
                     <div class="action-icon inv"><img src="https://placehold.co/24x24/424242/eeeeee?text=IN" alt="Invalidar" class="action-img"></div>
                     <h3>Invalidar un DTE</h3>
                     <p>Anular un DTE aceptado dentro del plazo</p>
