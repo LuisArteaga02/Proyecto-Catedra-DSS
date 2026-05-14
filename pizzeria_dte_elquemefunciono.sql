@@ -1,5 +1,8 @@
-/*Este es el que me funciono a mi. Primero hice "CREATE DATABASE pizzeria_dte;" aparte y luego importe el sql completo.
-  El unico cambio al sql que hace aparte de la creacion esta en INSERT INTO `factura_detalle` */
+/*Este es el que me funciono a mi en phpMyAdmin. Primero hice "CREATE DATABASE pizzeria_dte;" aparte y luego importe el sql completo.
+  El unico cambio al sql que hace aparte de la creacion esta en: INSERT INTO `factura_detalle` 
+  
+  mentira, tambien se agrego NIT a `cat_tipo_documento` 
+  */
 
 # ************************************************************
 # Antares - SQL Client
@@ -123,6 +126,8 @@ LOCK TABLES `cat_tipo_documento` WRITE;
 
 INSERT INTO `cat_tipo_documento` (`codigo`, `nombre`) VALUES
 	("13", "DUI");
+
+INSERT INTO `cat_tipo_documento` (`codigo`, `nombre`) VALUES ('36', 'NIT');
 
 /*!40000 ALTER TABLE `cat_tipo_documento` ENABLE KEYS */;
 UNLOCK TABLES;
