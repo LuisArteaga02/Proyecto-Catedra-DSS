@@ -378,7 +378,14 @@ try {
        ============================================================ */
     $conn->commit();
 
-    header("Location: index.php?msg=ccf_ok");
+     require_once 'class/GeneradorDTE.php';
+        $generador = new generadorDTE();
+        $json_final_dte = $generador->generarJSONConsumidorFinal($id_factura);
+        file_put_contents("dtes_firmados/" . $codigo_generacion . ".json", $json_final_dte);
+        
+        // Lo mandamos de regreso al inicio con un mensajito amigable
+        header("Location: ver_factura_dte.php?id=" . $id_factura);
+        
     exit();
 
 } catch (Exception $e) {

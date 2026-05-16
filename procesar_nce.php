@@ -331,7 +331,13 @@ try {
        ============================================================ */
     $conn->commit();
 
-    header("Location: index.php?msg=nce_ok");
+    require_once 'class/GeneradorDTE.php';
+        $generador = new generadorDTE();
+        $json_final_dte = $generador->generarJSONNotaCredito($id_factura_nce);
+        file_put_contents("dtes_firmados/" . $codigo_generacion . ".json", $json_final_dte);
+        
+        // Lo mandamos de regreso al inicio con un mensajito amigable
+        header("Location: ver_factura_nce.php?id=" . $id_factura_nce);
     exit();
 
 } catch (Exception $e) {

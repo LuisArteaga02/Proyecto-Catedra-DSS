@@ -168,9 +168,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Si llegamos hasta aquí sin que nada explotara, confirmamos todos los INSERTS
         $conn->commit();
+
+        require_once 'class/GeneradorDTE.php';
+        $generador = new generadorDTE();
+        $json_final_dte = $generador->generarJSONConsumidorFinal($id_factura);
+        file_put_contents("dtes_firmados/" . $codigo_generacion . ".json", $json_final_dte);
         
         // Lo mandamos de regreso al inicio con un mensajito amigable
-        header("Location: index.php?msg=factura_ok");
+        header("Location: ver_factura_dte.php?id=" . $id_factura);
         exit();
         
     } catch (Exception $e) {
