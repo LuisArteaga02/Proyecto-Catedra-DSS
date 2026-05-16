@@ -63,7 +63,6 @@ if ($result_muni) {
   <title>DTE — Comprobante de Crédito Fiscal</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/formularios.css">
-  <link rel="stylesheet" href="css/formularios_ccf.css">
 </head>
 
 <body>

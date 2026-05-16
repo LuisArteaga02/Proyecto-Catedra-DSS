@@ -76,7 +76,7 @@ function nav_class(string $pagina, string $activa): string {
             <span class="nav-item-text">Crédito fiscal - CCF 03</span>
         </a>
 
-        <a href="index.php" class="nav-item<?= nav_class('NCE', $pagina_activa) ?>">
+        <a href="factura_nce.php" class="nav-item<?= nav_class('NCE', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=N" alt="Nota de credito" class="nav-img"></span>
             <span class="nav-item-text">Nota de crédito - NCE 05</span>
         </a>

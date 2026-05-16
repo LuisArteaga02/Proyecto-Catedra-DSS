@@ -139,7 +139,7 @@ if ($result_recientes) {
                 </a>
  
                 <!-- Nota de crédito || NCE -->
-                <a href="index.php" class="action-card">
+                <a href="factura_nce.php" class="action-card">
                     <div class="action-icon nce"><img src="https://placehold.co/24x24/e65100/fff3e0?text=NC" alt="Nota Credito" class="action-img"></div>
                     <h3>Nota de crédito</h3>
                     <p>Para ajustar o devolver una FE o CCF ya aceptada</p>

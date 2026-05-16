@@ -724,21 +724,21 @@ input[readonly] {
 
 /* ===== AVISO INFORMATIVO CCF ===== */
 /* Franja que aparece debajo del banner explicando la diferencia con FE */
-.ccf-aviso {
-  background: var(--red-light);
-  border: 1px solid #e8b4ae;
-  border-left: 4px solid var(--red);
-  border-radius: 0 4px 4px 0;
-  padding: 10px 16px;
-  font-size: 11px;
-  color: var(--text);
-  margin: 0;
-  line-height: 1.5;
-}
+    .ccf-aviso {
+        background: var(--red-light);
+        border: 1px solid #e8b4ae;
+        border-left: 4px solid var(--red);
+        border-radius: 0 4px 4px 0;
+        padding: 10px 16px;
+        font-size: 11px;
+        color: var(--text);
+        margin: 0;
+        line-height: 1.5;
+    }
 
-.ccf-aviso strong {
-  color: var(--navy);
-}
+    .ccf-aviso strong { 
+        color: var(--navy);
+    }
 
 /* ===== METADATA STRIP CCF ===== */
 /* Igual que .metadata-strip del FE — mismo grid 3 columnas */
@@ -835,4 +835,348 @@ input[readonly] {
 @media (max-width: 900px) {
   .metadata-strip-ccf { grid-template-columns: 1fr 1fr; }
   .retencion-grid      { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   formularios_nce.css — Extensión para NCE (DTE Tipo 05)
+   Pizzeria El Salvador — Sistema de Facturación Electrónica
+   Importa formularios.css; solo agrega clases nuevas de la NCE.
+   Usa la misma paleta de variables definida en formularios.css.
+   ============================================================ */
+
+
+/* ===== CONTENEDOR PRINCIPAL NCE ===== */
+.nce-container {
+  background: var(--white);
+  border: 2px solid var(--navy);
+  border-radius: 6px;
+  max-width: 1300px;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(27, 42, 74, 0.13);
+}
+
+/* ===== BADGE NCE ===== */
+.badge-nce {
+  background: var(--red);
+  color: var(--white);
+  font-weight: 900;
+  font-size: 18px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+/* ===== AVISO INFORMATIVO NCE ===== */
+.nce-aviso {
+    background: var(--red-light);
+    border: 1px solid #e8b4ae;
+    border-left: 4px solid var(--red);
+    border-radius: 0 4px 4px 0;
+    padding: 10px 16px;
+    font-size: 11px;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.nce-aviso strong { 
+    color: var(--navy);
+}
+
+/* ===== BUSCADOR DE DTE ORIGINAL ===== */
+/* Bloque de búsqueda y confirmación del DTE que se corrige */
+.dte-buscar-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dte-buscar-row input {
+  flex: 1;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+.btn-buscar-dte {
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 7px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.btn-buscar-dte:hover { background: var(--navy-dark); }
+
+.btn-confirmar-dte {
+  background: #c8970a;
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 7px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.btn-confirmar-dte:hover { background: #a87c08; }
+.btn-confirmar-dte:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* ===== CARD DEL DTE ENCONTRADO ===== */
+/* Se muestra cuando se busca y confirma el DTE original */
+.dte-card {
+  display: none;    /* visible via JS cuando se confirma */
+  border: 1px solid #c8d8e8;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.dte-card.visible { display: block; }
+
+.dte-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #eaf0f8;
+  padding: 8px 14px;
+  border-bottom: 1px solid #c8d8e8;
+}
+
+.dte-card-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dte-card-badge.fe  { background: var(--red);  color: var(--white); }
+.dte-card-badge.ccf { background: var(--navy); color: var(--white); }
+
+.dte-card-receptor {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.dte-card-plazo {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.dte-card-plazo.ok     { background: #d4f5e4; color: #1a6b2f; }
+.dte-card-plazo.vencido { background: #fde8e7; color: #c0392b; }
+
+.dte-card-body {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
+.dte-card-field {
+  padding: 10px 14px;
+  border-right: 1px solid #e8eef5;
+  border-bottom: 1px solid #e8eef5;
+}
+
+.dte-card-field:nth-child(4n) { border-right: none; }
+
+.dte-card-field label {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.dte-card-field span {
+  font-size: 11px;
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.dte-card-field span.estado-ok      { color: #1a6b2f; }
+.dte-card-field span.estado-pending { color: #c8970a; }
+.dte-card-field span.sello-link {
+  color: var(--red);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.btn-cambiar-dte {
+  background: none;
+  border: 1px solid var(--navy);
+  color: var(--navy);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.btn-cambiar-dte:hover {
+  background: var(--navy);
+  color: var(--white);
+}
+
+/* ===== PILLS DE TIPO DE AJUSTE ===== */
+/* Devolución parcial / total / corrección de precio / descuento posterior */
+.tipo-ajuste-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.pill-ajuste {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--white);
+  color: var(--text);
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.pill-ajuste:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.pill-ajuste.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+}
+
+/* ===== TABLA DE ÍTEMS NCE ===== */
+/* Valores negativos en celdas de ajuste */
+.nce-container .items-table .val-negativo { color: #c0392b; font-weight: 700; }
+.nce-container .items-table .val-negativo input {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+/* Nota encima de la tabla */
+.nce-tabla-nota {
+    font-size:10px;
+    color:var(--navy);
+    background:var(--red-light);
+    padding:7px 12px;
+    border-radius:4px;
+    margin-bottom:10px;
+    font-weight:600;
+    border-left:3px solid var(--red);
+}
+
+/* ===== FORMA DE DEVOLUCIÓN ===== */
+.forma-devolucion-box {
+  background: var(--bg-section);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+.forma-devolucion-box label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* ===== TOTALES NCE (valores negativos) ===== */
+/* Cuadro de totales adapatado: muestra los ajustes como negativos */
+.nce-container .total-row.nce-negativo span:last-child {
+  color: #c0392b;
+  font-family: 'Courier New', monospace;
+}
+
+.nce-container .total-row.highlight.nce-total-devolver {
+  background: #c0392b;
+}
+
+.nce-container .totales-title.nce {
+  background: #8a1010;
+}
+
+/* ===== TOAST NCE ===== */
+#toast-nce {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--red);
+  color: var(--white);
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(192, 57, 43, 0.3);
+  display: none;
+  max-width: 340px;
+}
+
+#toast-nce.show    { display: block; animation: slideIn 0.3s ease; }
+#toast-nce.success { background: #27ae60; box-shadow: 0 4px 16px rgba(39,174,96,0.3); }
+/* slideIn definida en formularios.css — no se duplica */
+
+/* ===== NOTA LEGAL PIE ===== */
+.nce-nota-legal {
+    font-size:10px;
+    color:var(--navy);
+    background:var(--red-light);
+    padding:7px 12px;
+    border-radius:4px;
+    margin-bottom:10px;
+    font-weight:600;
+    border-left:3px solid var(--red);
+}
+
+/* ===== METADATA STRIP NCE ===== */
+.metadata-strip-nce {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: var(--bg-section);
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .metadata-strip-nce  { grid-template-columns: 1fr 1fr; }
+  .tipo-ajuste-pills   { flex-direction: column; }
+  .dte-card-body       { grid-template-columns: 1fr 1fr; }
+  .dte-buscar-row      { flex-wrap: wrap; }
 }
