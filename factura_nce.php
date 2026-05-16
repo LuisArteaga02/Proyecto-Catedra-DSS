@@ -385,18 +385,11 @@ if ($result_muni) {
 <div id="toast-nce"></div>
 
 <script>
-/* ================================================================
+  /* ================================================================
    CATÁLOGOS
    ================================================================ */
 const PRODUCTOS_DB  = <?= json_encode($productos_db) ?>;
 const MUNICIPIOS_DB = <?= json_encode($municipios_db) ?>;
-
-const TIPOS_ITEM = [
-  { v: '1', l: '1 — Bien' },
-  { v: '2', l: '2 — Servicio' },
-  { v: '3', l: '3 — Ambos' },
-  { v: '4', l: '4 — Otro cargo' }
-];
 
 /* ================================================================
    HELPERS
@@ -451,7 +444,7 @@ function setTipoAjuste(tipo, btn) {
 }
 
 /* ================================================================
-   BÚSQUEDA DEL DTE ORIGINAL (AJAX → buscar_dte.php)
+   BÚSQUEDA DEL DTE ORIGINAL (AJAX)
    ================================================================ */
 let dteConfirmado = false;
 
@@ -464,13 +457,11 @@ function buscarDTE() {
     .then(data => {
       if (!data.ok) { toast(data.msg || 'DTE no encontrado.'); return; }
 
-      // Calcular días transcurridos
       const fechaEmision = new Date(data.fecha_emision);
       const hoy          = new Date();
       const dias         = Math.floor((hoy - fechaEmision) / 86400000);
       const dentroPlazo  = dias <= 90;
 
-      // Llenar la card
       const badge = document.getElementById('dteCardBadge');
       badge.textContent = data.tipo_dte === '01' ? 'FE-01' : 'CCF-03';
       badge.className   = 'dte-card-badge ' + (data.tipo_dte === '01' ? 'fe' : 'ccf');
@@ -481,26 +472,19 @@ function buscarDTE() {
       document.getElementById('dteCardUUID').title            = data.codigo_generacion;
       document.getElementById('dteCardFecha').textContent     = data.fecha_emision;
       document.getElementById('dteCardTotal').textContent     = '$' + parseFloat(data.monto_total).toFixed(2);
-      document.getElementById('dteCardSello').textContent     = data.sello_recibido
-        ? data.sello_recibido.substring(0,14) + '…' : '(pendiente)';
-      document.getElementById('dteCardDocReceptor').textContent =
-        (data.tipo_documento || 'DUI') + ': ' + (data.num_documento || '—');
+      document.getElementById('dteCardSello').textContent     = data.sello_recibido ? data.sello_recibido.substring(0,14) + '…' : '(pendiente)';
+      document.getElementById('dteCardDocReceptor').textContent = (data.tipo_documento || 'DUI') + ': ' + (data.num_documento || '—');
+      
       document.getElementById('dteCardEstado').textContent    = data.estado_mh;
-      document.getElementById('dteCardEstado').className      =
-        data.estado_mh === 'PROCESADO' || data.estado_mh === 'ACEPTADO'
-          ? 'estado-ok' : 'estado-pending';
+      document.getElementById('dteCardEstado').className      = data.estado_mh === 'PROCESADO' || data.estado_mh === 'ACEPTADO' ? 'estado-ok' : 'estado-pending';
 
       const plazoEl = document.getElementById('dteCardPlazo');
-      plazoEl.textContent = dentroPlazo
-        ? `Dentro del plazo (${dias} días de 90)`
-        : `⚠ Fuera de plazo (${dias} días)`;
+      plazoEl.textContent = dentroPlazo ? `Dentro del plazo (${dias} días de 90)` : `⚠ Fuera de plazo (${dias} días)`;
       plazoEl.className = 'dte-card-plazo ' + (dentroPlazo ? 'ok' : 'vencido');
 
-      // Mostrar card y habilitar Confirmar
       document.getElementById('dteCard').classList.add('visible');
       document.getElementById('btnConfirmar').disabled = false;
 
-      // Guardar datos para confirmar
       window._dteEncontrado = data;
     })
     .catch(() => toast('Error al consultar el DTE. Verifique la conexión.'));
@@ -524,7 +508,14 @@ function confirmarDTE() {
   document.querySelector('.btn-buscar-dte').disabled   = true;
 
   markErr('dte_buscar_input', 'err_dte_rel', false);
-  toast('DTE confirmado correctamente.', 'success');
+  
+  // Limpiamos la tabla y generamos una fila vacía nueva.
+  // Como el DTE ya está confirmado, el ComboBox se llenará con los ítems de ese DTE.
+  const tbody = document.querySelector('#tablaItems tbody');
+  tbody.innerHTML = '';
+  addItem();
+  
+  toast('DTE confirmado. Seleccione los ítems a ajustar en la tabla.', 'success');
 }
 
 function resetDTE() {
@@ -541,25 +532,36 @@ function resetDTE() {
   ['id_factura_original','tipo_dte_original','codigo_gen_original',
    'numero_control_original','fecha_emision_original','id_receptor_original']
     .forEach(id => document.getElementById(id).value = '');
+
+  const tbody = document.querySelector('#tablaItems tbody');
+  tbody.innerHTML = '';
+  addItem();
+  calcTotales();
 }
 
-/* Permite también buscar con Enter */
 document.getElementById('dte_buscar_input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') { e.preventDefault(); buscarDTE(); }
 });
 
 /* ================================================================
-   TABLA DE ÍTEMS NCE
-   Los valores de ajuste son negativos en la lógica de la NCE.
-   El usuario ingresa la cantidad a devolver y el precio original.
+   TABLA DE ÍTEMS NCE — CON COMBOBOX
    ================================================================ */
-function optsProductos() {
-  let html = '<option value="">-- Seleccione producto --</option>';
-  PRODUCTOS_DB.forEach(p => {
-    html += `<option value="${p.id_producto}"
-             data-precio="${parseFloat(p.precio).toFixed(8)}"
-             data-codigo="${p.codigo_mh}">
-             ${p.codigo_mh} - ${p.product_name}</option>`;
+
+// Genera los <options> extrayéndolos directamente del DTE encontrado
+function getItemsDTEOptions() {
+  if (!window._dteEncontrado || !window._dteEncontrado.items) {
+    return '<option value="">-- Confirme el DTE primero --</option>';
+  }
+  let html = '<option value="">-- Seleccione un ítem del DTE original --</option>';
+  window._dteEncontrado.items.forEach((item) => {
+    html += `<option value="${item.id_producto}"
+             data-codigo="${item.codigo_mh}"
+             data-nombre="${item.product_name}"
+             data-precio="${item.precio_unitario}"
+             data-cant="${item.cantidad}"
+             data-desc="${item.descuento}">
+             ${item.codigo_mh} — ${item.product_name} (Máx: ${item.cantidad})
+             </option>`;
   });
   return html;
 }
@@ -569,29 +571,26 @@ function filaItem(n) {
 <tr>
   <td class="td-num">${n}</td>
   <td>
-    <input type="text" name="codigo_item[]" class="in-table cod-item"
-           maxlength="10" placeholder="PZ-PEP">
+    <input type="text" name="codigo_item[]" class="in-table cod-item" readonly placeholder="---">
   </td>
   <td>
-    <input type="text" name="desc_ajuste[]" class="in-table desc-ajuste"
-           maxlength="200" required placeholder="Ej: Pizza pepperoni devuelta">
+    <select name="id_producto[]" class="in-table desc-ajuste-select" onchange="seleccionarItemDTE(this)" required>
+      ${getItemsDTEOptions()}
+    </select>
+    <input type="hidden" name="desc_ajuste[]" class="desc-ajuste-hidden">
   </td>
   <td>
     <input type="number" name="cant[]" class="in-table qty"
-           min="0.01" step="0.01" value="1"
-           onkeypress="return isNum(event)">
+           min="0.01" step="0.01" value="0.00"
+           onkeypress="return isNum(event)" oninput="calcTotales()">
   </td>
   <td>
-    <select name="id_producto[]" class="in-table prod-select"
-            onchange="seleccionarProducto(this)" style="display:none;"></select>
     <input type="number" name="precio_unit[]" class="in-table price"
-           step="0.000001" min="0" value="0.00"
-           onkeypress="return isNum(event)"
-           placeholder="Precio original">
+           step="0.000001" min="0" value="0.00" readonly>
   </td>
   <td>
     <input type="number" name="descuento_item[]" class="in-table desc_item"
-           step="0.01" value="0.00" onkeypress="return isNum(event)">
+           step="0.01" value="0.00" onkeypress="return isNum(event)" oninput="calcTotales()">
   </td>
   <td class="val-negativo">
     <input type="number" name="v_ajuste[]" class="in-table v_ajuste"
@@ -607,14 +606,30 @@ function filaItem(n) {
 </tr>`;
 }
 
-function seleccionarProducto(selectEl) {
-  const tr      = selectEl.closest('tr');
-  const option  = selectEl.options[selectEl.selectedIndex];
-  const priceEl = tr.querySelector('.price');
-  const codEl   = tr.querySelector('.cod-item');
+function seleccionarItemDTE(selectEl) {
+  const tr = selectEl.closest('tr');
+  const option = selectEl.options[selectEl.selectedIndex];
+
+  const codEl      = tr.querySelector('.cod-item');
+  const descHidden = tr.querySelector('.desc-ajuste-hidden');
+  const qtyEl      = tr.querySelector('.qty');
+  const priceEl    = tr.querySelector('.price');
+  const descItemEl = tr.querySelector('.desc_item');
+
+  // Si selecciona un producto válido, rellenamos las cajas automáticamente
   if (option.value) {
-    priceEl.value = parseFloat(option.dataset.precio).toFixed(2);
-    if (codEl && option.dataset.codigo) codEl.value = option.dataset.codigo;
+    codEl.value      = option.dataset.codigo;
+    descHidden.value = 'Devolución/Ajuste: ' + option.dataset.nombre;
+    priceEl.value    = parseFloat(option.dataset.precio).toFixed(2);
+    qtyEl.value      = option.dataset.cant; // Sugerimos devolver toda la cantidad
+    qtyEl.max        = option.dataset.cant; // Límite para que no devuelva más de lo original
+    descItemEl.value = option.dataset.desc;
+  } else {
+    codEl.value      = '';
+    descHidden.value = '';
+    priceEl.value    = '0.00';
+    qtyEl.value      = '0.00';
+    descItemEl.value = '0.00';
   }
   calcTotales();
 }
@@ -635,14 +650,10 @@ function delItem(btn) {
 }
 
 document.getElementById('addItem').addEventListener('click', addItem);
-addItem(); // primera fila por defecto
+addItem(); 
 
 /* ================================================================
-   CÁLCULO DE TOTALES — NCE
-   El precio unitario de la NCE incluye IVA (igual que en la FE):
-     v_ajuste = (qty × precio) − descuento   (con IVA)
-     iva_ajuste = v_ajuste / 1.13 × 0.13     (IVA extraído)
-   Los valores se muestran como negativos (ajuste a favor del receptor).
+   CÁLCULO DE TOTALES
    ================================================================ */
 function calcTotales() {
   let grav = 0, iva = 0;
@@ -663,16 +674,14 @@ function calcTotales() {
   });
 
   const subtotal = grav;
-  const total    = grav;  // total = gravada (iva ya está incluido en FE)
+  const total    = grav; 
 
-  // Mostrar como negativos
   document.getElementById('t_gravada').textContent  = fmtNeg(grav);
   document.getElementById('t_subtotal').textContent = fmtNeg(subtotal);
   document.getElementById('t_iva').textContent      = fmtNeg(iva);
   document.getElementById('t_total').textContent    = '-$' + fmt(total);
   document.getElementById('t_letras').textContent   = 'SON: ' + numLetras(total);
 
-  // Campos hidden (valores positivos — el servidor los guarda como negativos)
   document.getElementById('h_gravada').value  = fmt(grav);
   document.getElementById('h_subtotal').value = fmt(subtotal);
   document.getElementById('h_iva').value      = fmt(iva);
@@ -725,37 +734,35 @@ document.getElementById('descripcion_motivo').addEventListener('blur', function 
 function validarFormulario() {
   let ok = true;
 
-  /* DTE original confirmado */
   if (!dteConfirmado || !document.getElementById('id_factura_original').value) {
     markErr('dte_buscar_input', 'err_dte_rel', true);
     toast('Debe buscar y confirmar el DTE original antes de emitir la NCE.');
     ok = false;
   }
 
-  /* Descripción del motivo */
   const motivo = document.getElementById('descripcion_motivo').value.trim();
   markErr('descripcion_motivo', 'err_motivo', motivo.length < 5);
   if (motivo.length < 5) ok = false;
 
-  /* Ítems: descripción y precio > 0 */
   let itemsOk = true;
   document.querySelectorAll('#tablaItems tbody tr').forEach(tr => {
-    const desc  = tr.querySelector('.desc-ajuste');
-    const price = tr.querySelector('.price');
-    const qty   = tr.querySelector('.qty');
-    const dv    = desc  && desc.value.trim().length > 0;
-    const pv    = price && parseFloat(price.value) > 0;
-    const qv    = qty   && parseFloat(qty.value)   > 0;
-    if (desc)  desc.classList.toggle('is-invalid',  !dv);
-    if (price) price.classList.toggle('is-invalid', !pv);
-    if (!dv || !pv || !qv) itemsOk = false;
+    const select = tr.querySelector('.desc-ajuste-select');
+    const price  = tr.querySelector('.price');
+    const qty    = tr.querySelector('.qty');
+    
+    const validSelect = select && select.value !== '';
+    const validPrice  = price && parseFloat(price.value) >= 0;
+    const validQty    = qty   && parseFloat(qty.value)   > 0;
+    
+    if (select) select.classList.toggle('is-invalid', !validSelect);
+    
+    if (!validSelect || !validPrice || !validQty) itemsOk = false;
   });
   if (!itemsOk) {
-    toast('Verifique que todos los ítems tengan descripción, precio y cantidad válidos.');
+    toast('Verifique que todos los ítems tengan un producto seleccionado y cantidad válida.');
     ok = false;
   }
 
-  /* Total > 0 */
   const total = parseFloat(document.getElementById('h_total').value) || 0;
   if (total <= 0) { toast('El total a devolver debe ser mayor a $0.00'); ok = false; }
 
@@ -763,9 +770,6 @@ function validarFormulario() {
   return ok;
 }
 
-/* ================================================================
-   ACCIONES
-   ================================================================ */
 function confirmarCancelar() {
   if (confirm('¿Cancelar operación? Se perderán los datos ingresados.'))
     location.href = 'index.php';

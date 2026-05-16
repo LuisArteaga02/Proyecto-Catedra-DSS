@@ -21,6 +21,15 @@ $f_receptor = $_GET['f_receptor'] ?? '';
 $f_tipo = $_GET['f_tipo'] ?? '';
 $f_estado = $_GET['f_estado'] ?? '';
 
+//Tipos de DTE para las label de front
+$etiquetasDTE = [
+    '01' => 'FE - 01',
+    '03' => 'CCF - 03',
+    '05' => 'NCE - 05',
+    '11' => 'FEX - 11', // Factura de Exportación (según tu BD)
+    '14' => 'FSE - 14'  // Factura Sujeto Excluido (según tu BD)
+];
+
 // Construir la consulta dinámica
 $sql = "SELECT 
             f.tipo_dte, 
@@ -172,7 +181,7 @@ if ($result) {
             <div style="padding: 30px; text-align: center; color: #888;">No hay facturas registradas aún.</div>
         <?php else: ?>
             <?php foreach ($facturas as $index => $fac): 
-                $tipoLabel = ($fac['tipo_dte'] == '01') ? 'FE - 01' : 'CCF - 03';
+                $tipoLabel = $etiquetasDTE[$fac['tipo_dte']] ?? 'DTE - ' . $fac['tipo_dte'];
                 $badgeClass = ($fac['estado_mh'] == 'ACEPTADO') ? 'badge-aceptado' : 'badge-pendiente';
                 
                 // Formateamos fecha
