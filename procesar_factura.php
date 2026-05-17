@@ -110,21 +110,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // --------------------------------------------------------
         // 2. INSERCIÓN DE FACTURA CON ID_RECEPTOR INTEGRADO
         // --------------------------------------------------------
-        // Ahora guardamos el id_receptor directamente en la tabla factura
+        // Ahora guardamos el id_receptor directamente en la tabla factura, forzando estado_mh a ACEPTADO
+        $sello_falso = "TEST-" . substr(md5(uniqid()), 0, 15);
         $sql_factura = "INSERT INTO factura (
             id_receptor, codigo_generacion, numero_control, fecha_emision, hora_emision, condicion_pago,
             total_no_sujeto, total_exento, total_gravado, sub_total, iva_retenido,
-            monto_total, total_iva, total_letras
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Total generado por sistema')";
+            monto_total, total_iva, total_letras, estado_mh, sello_recibido
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Total generado por sistema', 'ACEPTADO', ?)";
         
         $stmt = $conn->prepare($sql_factura);
         
         // El primer parámetro es el ID del receptor que acabamos de crear/buscar
-        // 'i' para id_receptor, seguido del resto
-        $stmt->bind_param("issssiddddddd", 
+        // 'i' para id_receptor, seguido del resto, incluyendo la 's' final para el sello
+        $stmt->bind_param("issssiddddddds", 
             $id_receptor, $codigo_generacion, $numero_control, $fecha_emision, $hora_emision, $condicion_pago,
             $total_no_sujeto, $total_exento, $total_gravado, $sub_total, $iva_retenido,
-            $monto_total, $total_iva
+            $monto_total, $total_iva, $sello_falso
         );
         $stmt->execute();
         
@@ -168,9 +169,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Si llegamos hasta aquí sin que nada explotara, confirmamos todos los INSERTS
         $conn->commit();
+
+        require_once 'class/GeneradorDTE.php';
+        $generador = new generadorDTE();
+        $json_final_dte = $generador->generarJSONConsumidorFinal($id_factura);
+        file_put_contents("dtes_firmados/" . $codigo_generacion . ".json", $json_final_dte);
         
         // Lo mandamos de regreso al inicio con un mensajito amigable
-        header("Location: index.php?msg=factura_ok");
+        header("Location: ver_factura_dte.php?id=" . $id_factura);
         exit();
         
     } catch (Exception $e) {

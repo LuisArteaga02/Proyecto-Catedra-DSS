@@ -772,3 +772,4 @@ img {
 .details-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; font-size: 12px; color: #111; }
 .detail-item { margin-bottom: 15px; }
 .detail-label { display: block; color: #444; margin-bottom: 4px; }
+
