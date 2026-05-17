@@ -161,11 +161,7 @@ if ($result_muni) {
                 </div>
                 <span class="error-msg" id="err_dte_rel">Debe buscar y confirmar el DTE original antes de continuar.</span>
               </div>
-              <div class="fe-group">
-                <label>MOTIVO Y AJUSTE</label>
-                <input type="text" name="motivo_breve" id="motivo_breve"
-                       maxlength="50" placeholder="Ej: Devolución, Error de precio">
-              </div>
+              
             </div>
 
             <!-- Card del DTE encontrado (oculta hasta buscar) -->
