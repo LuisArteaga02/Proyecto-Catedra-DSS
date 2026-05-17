@@ -99,7 +99,7 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Sección: Reportes -->
     <nav class="nav-section">
         <span class="nav-section-label">Reportes</span>
-        <a href="index.php" class="nav-item<?= nav_class('REPORTES', $pagina_activa) ?>">
+        <a href="reportes.php" class="nav-item<?= nav_class('REPORTES', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=R" alt="Reportes" class="nav-img"></span>
             Reportes
         </a>
