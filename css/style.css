@@ -1,0 +1,775 @@
+/* ============================================
+   Pizzeria El Salvador - Sistema DTE
+   style.css
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* ---------- Reset & Variables ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    /* Sidebar */
+    --sidebar-bg:       #1a1412;
+    --sidebar-width:    260px;
+    --sidebar-accent:   #c0392b;
+
+    /* Superficie principal */
+    --bg-main:          #f0efed;
+    --bg-card:          #ffffff;
+    --bg-card-hover:    #fafafa;
+
+    /* Texto */
+    --text-primary:     #1a1412;
+    --text-secondary:   #6b6560;
+    --text-muted:       #9e9890;
+    --text-sidebar:     #e8e2da;
+    --text-sidebar-dim: #7a6f68;
+
+    /* Badges de tipo DTE */
+    --fe-bg:    #fde8e7;
+    --fe-color: #c0392b;
+    --ccf-bg:   #e6f4ea;
+    --ccf-color:#2e7d32;
+    --nce-bg:   #fff3e0;
+    --nce-color:#e65100;
+    --inv-bg:   #eeeeee;
+    --inv-color:#424242;
+
+    /* Estado */
+    --estado-aceptado-bg:    #e6f4ea;
+    --estado-aceptado-color: #2e7d32;
+    --estado-contingencia-bg:    #fff3e0;
+    --estado-contingencia-color: #e65100;
+
+    /* Bordes */
+    --border: #e2ddd8;
+    --border-light: #ebe7e2;
+
+    /* Tipografía */
+    --font: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+
+    /* Sombras */
+    --shadow-card: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-card-hover: 0 4px 12px rgba(0,0,0,.10);
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font);
+    background: var(--bg-main);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ============================================
+   SIDEBAR / NAVEGACION
+   ============================================ */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+/* Branding */
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.sidebar-brand .brand-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.brand-logo-placeholder {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: var(--sidebar-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.brand-text .brand-name {
+    display: block;
+    color: var(--text-sidebar);
+    font-weight: 600;
+    font-size: 13.5px;
+    line-height: 1.3;
+}
+
+.brand-text .brand-sub {
+    display: block;
+    color: var(--text-sidebar-dim);
+    font-size: 11px;
+    margin-top: 1px;
+}
+
+/* Pill de producción */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(46,125,50,.25);
+    border: 1px solid rgba(46,125,50,.4);
+    color: #81c784;
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin: 12px 20px 0;
+}
+
+.status-pill .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #66bb6a;
+}
+
+/* User info */
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--sidebar-accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.user-avatar .online-dot {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #66bb6a;
+    border: 1.5px solid var(--sidebar-bg);
+}
+
+.user-info .user-name {
+    display: block;
+    color: var(--text-sidebar);
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.user-info .user-role {
+    display: block;
+    color: var(--text-sidebar-dim);
+    font-size: 11px;
+}
+
+/* Nav sections */
+.nav-section {
+    padding: 16px 0 4px;
+}
+
+.nav-section-label {
+    text-transform: uppercase;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--text-sidebar-dim);
+    padding: 0 20px 6px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    color: var(--text-sidebar-dim);
+    font-size: 13.5px;
+    font-weight: 400;
+    border-left: 3px solid transparent;
+    transition: background .15s, color .15s, border-color .15s;
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,.05);
+    color: var(--text-sidebar);
+}
+
+.nav-item.active {
+    background: rgba(192,57,43,.15);
+    color: #f0a09a;
+    border-left-color: var(--sidebar-accent);
+    font-weight: 500;
+}
+
+.nav-item .nav-icon {
+    font-size: 15px;
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+}
+
+/* Spacer & logout */
+.sidebar-spacer {
+    flex: 1;
+}
+
+.sidebar-logout {
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding: 4px 0 8px;
+}
+
+.sidebar-logout .nav-item {
+    color: #9e7770;
+}
+
+.sidebar-logout .nav-item:hover {
+    color: #e07070;
+    background: rgba(192,57,43,.08);
+}
+
+/* ============================================
+   TOPBAR
+   ============================================ */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px 0;
+}
+
+.topbar h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.topbar-date {
+    font-weight: 500;
+}
+
+.topbar-bell {
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color .15s;
+}
+
+.topbar-bell:hover {
+    color: var(--text-primary);
+}
+
+/* ============================================
+   PAGE CONTENT
+   ============================================ */
+
+.page-content {
+    padding: 24px 32px 40px;
+    flex: 1;
+}
+
+/* ============================================
+   SECCIÓN: ACCIONES RÁPIDAS
+   ============================================ */
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.action-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 22px 22px 20px;
+    cursor: pointer;
+    transition: box-shadow .2s, transform .15s, border-color .2s;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.action-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-1px);
+    border-color: #d4cec8;
+}
+
+.action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.action-icon.fe   { background: var(--fe-bg);  color: var(--fe-color);  }
+.action-icon.ccf  { background: var(--ccf-bg); color: var(--ccf-color); }
+.action-icon.nce  { background: var(--nce-bg); color: var(--nce-color); }
+.action-icon.inv  { background: var(--inv-bg); color: var(--inv-color); }
+
+.action-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.action-card p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Badge de tipo DTE dentro de tarjeta */
+.dte-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 11px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    margin-top: 6px;
+    width: fit-content;
+}
+
+.dte-badge.fe  { background: var(--fe-bg);  color: var(--fe-color);  }
+.dte-badge.ccf { background: var(--ccf-bg); color: var(--ccf-color); }
+.dte-badge.nce { background: var(--nce-bg); color: var(--nce-color); }
+.dte-badge.inv { background: var(--inv-bg); color: var(--inv-color); }
+
+/* ============================================
+   SECCIÓN: DTEs RECIENTES
+   ============================================ */
+
+.dtes-recientes-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+
+.dtes-recientes-card .section-title {
+    padding: 18px 22px 0;
+    margin-bottom: 0;
+}
+
+.dtes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.dtes-table thead tr {
+    background: #f7f5f3;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.dtes-table thead th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--text-muted);
+    padding: 9px 22px;
+}
+
+.dtes-table tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: background .12s;
+}
+
+.dtes-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.dtes-table tbody tr:hover {
+    background: #faf9f7;
+}
+
+.dtes-table tbody td {
+    padding: 12px 22px;
+    vertical-align: middle;
+}
+
+/* Col: Tipo */
+.td-tipo .dte-badge {
+    margin-top: 0;
+}
+
+/* Col: Receptor */
+.td-receptor .receptor-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.td-receptor .receptor-control {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-top: 1px;
+}
+
+/* Col: N° Control */
+.td-control {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Col: Monto */
+.td-monto {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.td-monto.negative {
+    color: var(--fe-color);
+}
+
+/* Col: Estado */
+.estado-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.estado-badge .estado-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.estado-badge.aceptado {
+    background: var(--estado-aceptado-bg);
+    color: var(--estado-aceptado-color);
+}
+
+.estado-badge.aceptado .estado-dot {
+    background: var(--estado-aceptado-color);
+}
+
+.estado-badge.contingencia {
+    background: var(--estado-contingencia-bg);
+    color: var(--estado-contingencia-color);
+}
+
+.estado-badge.contingencia .estado-dot {
+    background: var(--estado-contingencia-color);
+}
+
+/* Col: Acciones */
+.td-acciones {
+    text-align: right;
+}
+
+.btn-accion {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 13px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--font);
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    transition: background .15s, border-color .15s, color .15s;
+}
+
+.btn-accion:hover {
+    background: #f3f1ee;
+    border-color: #c8c2bb;
+    color: var(--text-primary);
+}
+
+/* ============================================
+   RESPONSIVE (básico)
+   ============================================ */
+
+@media (max-width: 900px) {
+    .quick-actions-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ============================================
+   CONTENCIÓN GLOBAL DE IMÁGENES
+   Evita que cualquier <img> desborde su contenedor
+   ============================================ */
+
+/* Regla base: ninguna imagen puede superar su contenedor */
+img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Logo en el sidebar brand */
+.brand-logo-placeholder {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-img {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    flex-shrink: 0;
+}
+
+/* Íconos de navegación del sidebar */
+.nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.nav-img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: block;
+}
+
+/* Campana de notificaciones en topbar */
+.topbar-bell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+}
+
+.topbar-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: block;
+    border-radius: 4px;
+}
+
+/* Íconos dentro de las tarjetas de acción rápida */
+.action-icon {
+    overflow: hidden;       /* ← clave: recorta cualquier desborde */
+    flex-shrink: 0;
+}
+
+.action-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
+    border-radius: 3px;
+}
+
+/* Íconos dentro de los botones de la tabla */
+.btn-accion {
+    overflow: hidden;
+}
+
+.btn-img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   RESPONSIVE (básico)
+   ============================================ */
+
+@media (max-width: 640px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+    .page-content {
+        padding: 16px;
+    }
+}
+
+/* ESTILOS DE HISTORIAL DE DTEs */
+.historial-topbar { 
+    background-color: #a43333; 
+    color: #ffffff; padding: 20px 30px; 
+    display: flex; justify-content: space-between; 
+    align-items: center; 
+}
+
+.historial-topbar h1 { 
+    margin: 0; 
+    font-size: 18px; 
+    text-transform: uppercase; 
+    font-weight: 700; 
+}
+
+.historial-topbar .company-name { 
+    font-size: 12px; 
+    font-weight: 600; 
+    text-transform: uppercase; 
+    color: #e0b4b4; 
+}
+
+.filters-container { 
+    padding: 25px 30px; 
+    background-color: #ffffff; 
+    border-bottom: 1px solid #eee; 
+}
+
+.filters-grid { 
+    display: flex; 
+    gap: 20px; 
+    margin-bottom: 25px; 
+    align-items: flex-end; 
+    flex-wrap: wrap; 
+}
+
+.filter-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 150px; }
+.filter-group label { font-size: 14px; color: #333; }
+.filter-group input { padding: 10px 12px; border: 1px solid #888; border-radius: 6px; font-size: 14px; color: #555; outline: none; }
+.filter-actions { display: flex; gap: 10px; }
+.btn-buscar { background-color: #c94646; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; }
+.btn-limpiar { background-color: transparent; color: #555; border: 1px solid #888; padding: 10px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; }
+.pills-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+.pills-label { font-size: 14px; color: #555; margin-right: 5px; }
+.pill-btn { background: transparent; border: 1px solid #888; color: #555; padding: 6px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.pill-btn.active.red { background-color: #fce4e4; color: #c94646; border-color: #fce4e4; font-weight: 600; }
+.pill-btn.active.green { background-color: #d1f7c4; color: #2e7d32; border-color: #d1f7c4; font-weight: 600; }
+.results-info { font-size: 12px; color: #777; margin: 20px 30px 10px 30px; }
+.table-header, .row-item { display: grid; grid-template-columns: 1fr 1fr 2fr 2fr 1fr 1.5fr; padding: 10px 30px; color: #555; font-size: 14px; align-items: center; }
+.table-header { padding-bottom: 5px; }
+.table-header .sortable { color: #c94646; }
+.row-item { padding: 15px 30px; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+.row-item:hover { background-color: #fafafa; }
+.row-item.highlight { background-color: #fdf5f5; border-radius: 8px; margin: 0 10px; }
+.td-tipo { color: #c94646; font-weight: 500; }
+.td-receptor { display: flex; flex-direction: column; }
+.td-receptor .dui { font-size: 12px; color: #999; }
+.td-monto { color: #888; font-weight: 600; }
+.td-codigo { color: #999; font-size: 13px; }
+.badge-aceptado { background-color: #d1f7c4; color: #2e7d32; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; border: 1px solid #7bc87c; display: inline-block; text-align: center; }
+.badge-pendiente { background-color: #fff3cd; color: #856404; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; border: 1px solid #ffeeba; display: inline-block; text-align: center; }
+.expanded-details { background-color: #f5f5f5; margin: 0 30px 20px 30px; padding: 25px; border-radius: 0 0 8px 8px; display: none; }
+.expanded-details.show { display: block; }
+.expanded-details h4 { margin: 0 0 15px 0; font-size: 13px; color: #333; }
+.details-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; font-size: 12px; color: #111; }
+.detail-item { margin-bottom: 15px; }
+.detail-label { display: block; color: #444; margin-bottom: 4px; }
+
