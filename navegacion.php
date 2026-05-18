@@ -71,17 +71,17 @@ function nav_class(string $pagina, string $activa): string {
             <span class="nav-item-text">Factura consumidor - FE 01</span>
         </a>
 
-        <a href="test.php" class="nav-item<?= nav_class('CCF', $pagina_activa) ?>">
+        <a href="factura_ccf.php" class="nav-item<?= nav_class('CCF', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=C" alt="Credito fiscal" class="nav-img"></span>
             <span class="nav-item-text">Crédito fiscal - CCF 03</span>
         </a>
 
-        <a href="test.php" class="nav-item<?= nav_class('NCE', $pagina_activa) ?>">
+        <a href="factura_nce.php" class="nav-item<?= nav_class('NCE', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=N" alt="Nota de credito" class="nav-img"></span>
             <span class="nav-item-text">Nota de crédito - NCE 05</span>
         </a>
 
-        <a href="test.php" class="nav-item<?= nav_class('INVALIDACION', $pagina_activa) ?>">
+        <a href="invalidacion.php" class="nav-item<?= nav_class('INVALIDACION', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=X" alt="Invalidar DTE" class="nav-img"></span>
             <span class="nav-item-text">Invalidar DTE</span>
         </a>
@@ -99,7 +99,7 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Sección: Reportes -->
     <nav class="nav-section">
         <span class="nav-section-label">Reportes</span>
-        <a href="test.php" class="nav-item<?= nav_class('REPORTES', $pagina_activa) ?>">
+        <a href="reportes.php" class="nav-item<?= nav_class('REPORTES', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=R" alt="Reportes" class="nav-img"></span>
             Reportes
         </a>
@@ -108,7 +108,7 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Sección: Configuración -->
     <nav class="nav-section">
         <span class="nav-section-label">Configuracion</span>
-        <a href="test.php" class="nav-item<?= nav_class('CONFIGURACION', $pagina_activa) ?>">
+        <a href="index.php" class="nav-item<?= nav_class('CONFIGURACION', $pagina_activa) ?>">
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=C" alt="Configuracion" class="nav-img"></span>
             Configuracion
         </a>
