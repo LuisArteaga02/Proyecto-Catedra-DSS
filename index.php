@@ -24,10 +24,7 @@ $pagina_activa = 'BOARD';
 
 // Array que muestra los DTE recientes con la base de datos
 $sql_recientes = "SELECT 
-<<<<<<< HEAD
-=======
                     f.id_factura,
->>>>>>> 53e73e9 (generacion de pdf de los dte funcionando)
                     f.tipo_dte, 
                     r.nombre AS receptor_nombre, 
                     f.numero_control, 
@@ -61,11 +58,8 @@ if ($result_recientes) {
         $tiempo = date('d/m/Y H:i', strtotime($row['fecha_registro']));
 
         $dtes_recientes[] = [
-<<<<<<< HEAD
-=======
             'id'           => $row['id_factura'],
             'tipo_dte'     => $row['tipo_dte'],
->>>>>>> 53e73e9 (generacion de pdf de los dte funcionando)
             'tipo_label'   => $tipo_label,
             'tipo_class'   => $tipo_class,
             'receptor'     => $row['receptor_nombre'] ?? 'Consumidor Final',
@@ -156,11 +150,7 @@ if ($result_recientes) {
                 </a>
  
                 <!-- Invalidar DTE || Invalidacion -->
-<<<<<<< HEAD
-                <a href="invalidacion.php" class="action-card">
-=======
                 <a href="index.php" class="action-card">
->>>>>>> Dashboard
                     <div class="action-icon inv"><img src="https://placehold.co/24x24/424242/eeeeee?text=IN" alt="Invalidar" class="action-img"></div>
                     <h3>Invalidar un DTE</h3>
                     <p>Anular un DTE aceptado dentro del plazo</p>
@@ -219,13 +209,6 @@ if ($result_recientes) {
                             </td>
 
                             <!-- Acción -->
-<<<<<<< HEAD
-                            <td class="td-acciones">
-                                <button class="btn-accion" type="button">
-                                    <img src="https://placehold.co/14x14/6b6560/ffffff?text=<?= urlencode(strtoupper(substr($dte['accion_icon'], 0, 1))) ?>" alt="<?= htmlspecialchars($dte['accion_label']) ?>" class="btn-img">
-                                    <?= htmlspecialchars($dte['accion_label']) ?>
-                                </button>
-=======
         <td class="td-acciones">
                                 <?php 
                                     // Evaluamos el tipo de DTE para asignar el archivo correspondiente
@@ -240,7 +223,6 @@ if ($result_recientes) {
                                     <img src="https://placehold.co/14x14/6b6560/ffffff?text=<?= urlencode(strtoupper(substr($dte['accion_icon'] ?? 'P', 0, 1))) ?>" alt="<?= htmlspecialchars($dte['accion_label'] ?? 'Ver PDF') ?>" class="btn-img">
                                     <?= htmlspecialchars($dte['accion_label'] ?? 'Ver PDF') ?>
                                 </a>
->>>>>>> 53e73e9 (generacion de pdf de los dte funcionando)
                             </td>
                         </tr>
                         <?php endforeach; ?>
