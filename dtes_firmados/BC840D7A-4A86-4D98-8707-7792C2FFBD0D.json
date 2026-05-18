@@ -1,0 +1,99 @@
+{
+    "identificacion": {
+        "version": 1,
+        "ambiente": "00",
+        "tipoDte": "03",
+        "numeroControl": "DTE-03-00000001-000000000000002",
+        "codigoGeneracion": "BC840D7A-4A86-4D98-8707-7792C2FFBD0D",
+        "tipoModelo": 1,
+        "tipoOperacion": 1,
+        "fecEmi": "2026-05-17",
+        "horEmi": "19:08:28",
+        "tipoMoneda": "USD"
+    },
+    "emisor": {
+        "nit": "0000-000000-000-0",
+        "nrc": "000000-0",
+        "nombre": "Pizzeria El Salvador (Default)",
+        "codigoActividad": "10005",
+        "descActividad": "Consumo final",
+        "nombreComercial": null,
+        "tipoEstablecimiento": "01",
+        "direccion": {
+            "departamento": "06",
+            "municipio": "01",
+            "complemento": "Dirección física de la pizzería"
+        },
+        "telefono": "2222-2222",
+        "correo": "info@pizzeria.com.sv",
+        "codEstableMH": null,
+        "codEstable": null,
+        "codPuntoVentaMH": null,
+        "codPuntoVenta": null
+    },
+    "receptor": {
+        "tipoDocumento": "36",
+        "numDocumento": "4455-545454-545-4",
+        "nrc": "68676767",
+        "nombre": "broooo",
+        "codigoActividad": "10005",
+        "descActividad": "Consumo final",
+        "direccion": {
+            "departamento": "06",
+            "municipio": "01",
+            "complemento": "bro bro 124"
+        },
+        "telefono": "2244-3222",
+        "correo": "broo@gmail.com"
+    },
+    "cuerpoDocumento": [
+        {
+            "numItem": 1,
+            "tipoItem": 1,
+            "numeroDocumento": null,
+            "cantidad": 4,
+            "codigo": "PZ-CAR",
+            "codTributo": null,
+            "uniMedida": 59,
+            "descripcion": "Pizza de Carne",
+            "precioUni": 5.30973451,
+            "montoDescu": 0,
+            "ventaNoSuj": 0,
+            "ventaExenta": 0,
+            "ventaGravada": 21.24,
+            "tributos": [
+                "20"
+            ],
+            "psv": 0,
+            "noGravado": 0,
+            "ivaItem": 2.44353982
+        }
+    ],
+    "resumen": {
+        "totalNoSuj": 0,
+        "totalExenta": 0,
+        "totalGravada": 21.24,
+        "subTotalVentas": 21.24,
+        "descuNoSuj": 0,
+        "descuExenta": 0,
+        "descuGravada": 0,
+        "porcentajeDescuento": 0,
+        "totalDescu": 0,
+        "tributos": [
+            {
+                "codigo": "20",
+                "descripcion": "IMPUESTO AL VALOR AGREGADO 13%",
+                "valor": 2.76
+            }
+        ],
+        "subTotal": 21.24,
+        "ivaRete1": 0,
+        "reteRenta": 0,
+        "montoTotalOperacion": 24,
+        "totalPagar": 24,
+        "totalLetras": "Total generado por sistema",
+        "saldoFavor": 0,
+        "condicionOperacion": 1,
+        "pagos": null
+    }
+}
