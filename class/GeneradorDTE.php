@@ -274,6 +274,7 @@ class GeneradorDTE {
         return json_encode($dte, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
     
+<<<<<<< HEAD
     public function generarJSONInvalidacion($idFactura, $idEvento) {
         $encabezado = $this->facturaModel->getEncabezadoFactura($idFactura);
         $datosEmisor = $this->facturaModel->getEmisor();
@@ -337,5 +338,7 @@ class GeneradorDTE {
         return json_encode($dteInvalidacion, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
     
+=======
+>>>>>>> Dashboard
 }
 ?>

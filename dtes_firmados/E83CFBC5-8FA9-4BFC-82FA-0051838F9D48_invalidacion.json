@@ -1,0 +1,38 @@
+{
+    "identificacion": {
+        "version": 2,
+        "ambiente": "00",
+        "codigoGeneracion": "E83CFBC5-8FA9-4BFC-82FA-0051838F9D48",
+        "fecAnula": "2026-05-17",
+        "horAnula": "16:25:54"
+    },
+    "emisor": {
+        "nit": "0000-000000-000-0",
+        "nombre": "Pizzeria El Salvador (Default)",
+        "tipoEstablecimiento": "01",
+        "nomEstablecimiento": "Pizzeria El Salvador (Default)",
+        "codigoEstablecimiento": "0001",
+        "codigoPuntoVenta": "0001",
+        "telefono": "2222-2222",
+        "correo": "info@pizzeria.com.sv"
+    },
+    "documento": {
+        "tipoDte": "05",
+        "codigoGeneracion": "F4EC0D25-F3EF-4930-9827-3C75B43615CC",
+        "selloRecibido": "SELLO_NO_RECIBIDO_EN_PRUEBAS",
+        "numeroControl": "DTE-05-00000001-000000000000005",
+        "fecEmi": "2026-05-16",
+        "montoIva": -0.58,
+        "codigoGeneracionR": null,
+        "tipoDocumento": "05",
+        "fechaEmision": "2026-05-16"
+    },
+    "motivo": {
+        "tipoAnulacion": 2,
+        "motivoAnulacion": "prueba blablabla",
+        "nombreResponsable": "Alexis Perez",
+        "tipDocSolicita": "36",
+        "numDocSolicita": "0000-000000-000-0",
+        "nombreSolicita": "Pizzeria El Salvador (Default)"
+    }
+}

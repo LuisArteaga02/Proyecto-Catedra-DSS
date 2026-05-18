@@ -81,7 +81,11 @@ function nav_class(string $pagina, string $activa): string {
             <span class="nav-item-text">Nota de crédito - NCE 05</span>
         </a>
 
+<<<<<<< HEAD
         <a href="invalidacion.php" class="nav-item<?= nav_class('INVALIDACION', $pagina_activa) ?>">
+=======
+        <a href="index.php" class="nav-item<?= nav_class('INVALIDACION', $pagina_activa) ?>">
+>>>>>>> Dashboard
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=X" alt="Invalidar DTE" class="nav-img"></span>
             <span class="nav-item-text">Invalidar DTE</span>
         </a>
@@ -99,7 +103,11 @@ function nav_class(string $pagina, string $activa): string {
     <!-- Sección: Reportes -->
     <nav class="nav-section">
         <span class="nav-section-label">Reportes</span>
+<<<<<<< HEAD
         <a href="reportes.php" class="nav-item<?= nav_class('REPORTES', $pagina_activa) ?>">
+=======
+        <a href="index.php" class="nav-item<?= nav_class('REPORTES', $pagina_activa) ?>">
+>>>>>>> Dashboard
             <span class="nav-icon"><img src="https://placehold.co/16x16/888/fff?text=R" alt="Reportes" class="nav-img"></span>
             Reportes
         </a>
