@@ -110,22 +110,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // --------------------------------------------------------
         // 2. INSERCIÓN DE FACTURA CON ID_RECEPTOR INTEGRADO
         // --------------------------------------------------------
-        // Ahora guardamos el id_receptor directamente en la tabla factura, forzando estado_mh a ACEPTADO
-        $sello_falso = "TEST-" . substr(md5(uniqid()), 0, 15);
+        // Ahora guardamos el id_receptor directamente en la tabla factura
         $sql_factura = "INSERT INTO factura (
             id_receptor, codigo_generacion, numero_control, fecha_emision, hora_emision, condicion_pago,
             total_no_sujeto, total_exento, total_gravado, sub_total, iva_retenido,
-            monto_total, total_iva, total_letras, estado_mh, sello_recibido
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Total generado por sistema', 'ACEPTADO', ?)";
+            monto_total, total_iva, total_letras
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Total generado por sistema')";
         
         $stmt = $conn->prepare($sql_factura);
         
         // El primer parámetro es el ID del receptor que acabamos de crear/buscar
-        // 'i' para id_receptor, seguido del resto, incluyendo la 's' final para el sello
-        $stmt->bind_param("issssiddddddds", 
+        // 'i' para id_receptor, seguido del resto
+        $stmt->bind_param("issssiddddddd", 
             $id_receptor, $codigo_generacion, $numero_control, $fecha_emision, $hora_emision, $condicion_pago,
             $total_no_sujeto, $total_exento, $total_gravado, $sub_total, $iva_retenido,
-            $monto_total, $total_iva, $sello_falso
+            $monto_total, $total_iva
         );
         $stmt->execute();
         

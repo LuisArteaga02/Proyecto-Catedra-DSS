@@ -6,37 +6,39 @@ if (!isset($_SESSION['usuario_nombre'])) {
     exit();
 }
 
-// Configuración de la página activa para el menú lateral
 $pagina_activa = 'REPORTES';
 
-// --- SIMULACIÓN DE CONSULTAS A LA BASE DE DATOS (REEMPLAZAR CON TU CONEXIÓN PDO) ---
-// Datos del Emisor / Sucursal (Tabla: emisor)
-$sucursal_nombre = "Pizzería El Salvador — Sucursal Central";
-$sucursal_codigo = "0001"; 
+// --- IMPORTAR CLASES ---
+// Aseguramos la ruta hacia la carpeta class
+require_once 'class/Database.php';
+require_once 'class/ReporteModel.php';
 
-// Rango de fechas seleccionado (Filtros)
+// --- INICIAR CONEXIÓN ---
+$database = new Database();
+// Dependiendo de cómo esté hecho tu Database.php, llama al método que devuelve la conexión mysqli
+$conn = $database->getConnection(); 
+
+// Instanciamos el modelo pasándole la conexión
+$reporteModel = new ReporteModel($conn);
+
+// --- RANGO DE FECHAS (Filtros) ---
 $fecha_desde = $_GET['fecha_desde'] ?? date('Y-m-01');
 $fecha_hasta = $_GET['fecha_hasta'] ?? date('Y-m-d');
 
-// KPIs simulados (Equivalente a hacer un SUM() e COUNT() en la tabla 'factura')
-$total_ventas = 1358.50;
-$cant_dtes_emitidos = 45;
-$cant_dtes_anulados = 3; // Estado 'ANULADO'
-$total_iva_retenido = 12.45;
+// --- OBTENER DATOS USANDO EL MODELO ---
+$emisorInfo = $reporteModel->getEmisor();
+$sucursal_nombre = $emisorInfo['nombre'] ?? "Pizzería El Salvador — Sucursal Central";
+$sucursal_codigo = $emisorInfo['cod_estable_mh'] ?? "0001"; 
 
-$resumen_dtes = [
-    ['tipo' => '01', 'nombre' => 'Factura Consumidor Final', 'cantidad' => 32, 'total' => 450.25],
-    ['tipo' => '03', 'nombre' => 'Comprobante de Crédito Fiscal', 'cantidad' => 8, 'total' => 908.25],
-    ['tipo' => '05', 'nombre' => 'Nota de Crédito (Ajustes)', 'cantidad' => 5, 'total' => -35.60]
-];
+$kpis = $reporteModel->getKpis($fecha_desde, $fecha_hasta);
+$total_ventas       = $kpis['total_ventas'];
+$cant_dtes_emitidos = $kpis['cant_dtes_emitidos'] ?? 0;
+$cant_dtes_anulados = $kpis['cant_dtes_anulados'] ?? 0;
+$total_iva_retenido = $kpis['total_iva_retenido'];
 
+$resumen_dtes = $reporteModel->getResumenDtes($fecha_desde, $fecha_hasta);
+$productos_top = $reporteModel->getProductosTop($fecha_desde, $fecha_hasta);
 
-$productos_top = [
-    ['nombre' => 'Pizza de Pepperoni', 'cantidad' => 120, 'total' => 600.00],
-    ['nombre' => 'Pizza de Carne', 'cantidad' => 85, 'total' => 510.00],
-    ['nombre' => 'Coca Cola', 'cantidad' => 64, 'total' => 48.00],
-    ['nombre' => 'Panes con Ajo', 'cantidad' => 25, 'total' => 50.00]
-];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -58,7 +60,7 @@ $productos_top = [
 
             <div class="topbar">
                 <h1>Panel de Reportes y Estadísticas</h1>
-                <span class="company-name">Pizzería El Salvador S.A. de C.V.</span>
+                <span class="company-name"><?= htmlspecialchars($sucursal_nombre) ?></span>
             </div>
 
             <div class="page-content">
@@ -72,7 +74,7 @@ $productos_top = [
                             </div>
                         </div>
                         <div class="fe-header-right">
-                            <span>Código Establecimiento MH: <strong class="fe-code"><?= $sucursal_codigo ?></strong></span><br>
+                            <span>Código Establecimiento MH: <strong class="fe-code"><?= htmlspecialchars($sucursal_codigo) ?></strong></span><br>
                             <span>Ecosistema Transmisor DTE</span>
                         </div>
                     </div>
@@ -147,16 +149,20 @@ $productos_top = [
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($resumen_dtes as $dte): ?>
-                                                <tr>
-                                                    <td class="td-num"><?= $dte['tipo'] ?></td>
-                                                    <td style="text-align: left; padding-left: 10px; font-weight: 600;"><?= $dte['nombre'] ?></td>
-                                                    <td><?= $dte['cantidad'] ?></td>
-                                                    <td style="font-family: 'Courier New', monospace; font-weight: 700; color: <?= $dte['total'] < 0 ? 'var(--red)' : 'var(--navy)' ?>;">
-                                                        $<?= number_format($dte['total'], 2) ?>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
+                                            <?php if(empty($resumen_dtes)): ?>
+                                                <tr><td colspan="4" style="text-align:center;">No hay datos para las fechas seleccionadas.</td></tr>
+                                            <?php else: ?>
+                                                <?php foreach ($resumen_dtes as $dte): ?>
+                                                    <tr>
+                                                        <td class="td-num"><?= htmlspecialchars($dte['tipo']) ?></td>
+                                                        <td style="text-align: left; padding-left: 10px; font-weight: 600;"><?= htmlspecialchars($dte['nombre']) ?></td>
+                                                        <td><?= $dte['cantidad'] ?></td>
+                                                        <td style="font-family: 'Courier New', monospace; font-weight: 700; color: <?= $dte['total'] < 0 ? 'var(--red)' : 'var(--navy)' ?>;">
+                                                            $<?= number_format($dte['total'], 2) ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -176,15 +182,19 @@ $productos_top = [
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($productos_top as $prod): ?>
-                                                <tr>
-                                                    <td style="text-align: left; padding-left: 10px; font-weight: 600; color: var(--text-muted);"><?= $prod['nombre'] ?></td>
-                                                    <td class="td-num"><?= $prod['cantidad'] ?> uds.</td>
-                                                    <td style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--navy);">
-                                                        $<?= number_format($prod['total'], 2) ?>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
+                                            <?php if(empty($productos_top)): ?>
+                                                <tr><td colspan="3" style="text-align:center;">No hay datos para las fechas seleccionadas.</td></tr>
+                                            <?php else: ?>
+                                                <?php foreach ($productos_top as $prod): ?>
+                                                    <tr>
+                                                        <td style="text-align: left; padding-left: 10px; font-weight: 600; color: var(--text-muted);"><?= htmlspecialchars($prod['nombre']) ?></td>
+                                                        <td class="td-num"><?= (float)$prod['cantidad'] ?> uds.</td>
+                                                        <td style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--navy);">
+                                                            $<?= number_format($prod['total'], 2) ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>

@@ -219,21 +219,20 @@ try {
     /* ============================================================
        5. INSERCIÓN EN TABLA factura (tipo_dte = '03')
        ============================================================ */
-    $sello_falso = "TEST-" . substr(md5(uniqid()), 0, 15);
     $sql_factura = "INSERT INTO factura (
         tipo_dte,    id_receptor,
         codigo_generacion, numero_control,
         fecha_emision, hora_emision, condicion_pago,
         total_no_sujeto, total_exento, total_gravado,
         sub_total, iva_retenido, retencion_renta,
-        monto_total, total_iva, total_letras, estado_mh, sello_recibido
+        monto_total, total_iva, total_letras
     ) VALUES (
         ?, ?,
         ?, ?,
         ?, ?, ?,
         ?, ?, ?,
         ?, ?, ?,
-        ?, ?, ?, 'ACEPTADO', ?
+        ?, ?, ?
     )";
 
     $stmt_fac = $conn->prepare($sql_factura);
@@ -252,7 +251,7 @@ try {
         $fecha_emision,   $hora_emision,    $condicion_pago,
         $total_no_sujeto, $total_exento,    $total_gravado,
         $sub_total,       $iva_retenido,    $retencion_renta,
-        $monto_total,     $total_iva,       $total_letras, $sello_falso
+        $monto_total,     $total_iva,       $total_letras
     );
     $stmt_fac->execute();
     $id_factura = $conn->insert_id;
